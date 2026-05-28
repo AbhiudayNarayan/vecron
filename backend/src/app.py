@@ -1,0 +1,23 @@
+from fastapi import FastAPI
+from routes.PublicRoute import route as PublicRoute
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+# middleware
+origins = [
+    "http://localhost",
+    "*",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# add routes
+
+app.include_router(PublicRoute)
