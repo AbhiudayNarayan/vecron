@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import ParticleBackground from '../../components/ParticleBackground';
 import WaveBackground from "../../components/WaveBackground";
+import FloatingIconsBackground from "../../components/FloatingIconsBackground";
 
 /**
  * RegisterPage
@@ -70,6 +71,15 @@ export default function RegisterPage() {
         try {
             const response = await axiosClient.post("/auth/register", { name, email, password });
             setSuccessMsg(response.data.msg);
+            // reset form on success
+            setName("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+            setAgreedToTerms(false);
+            setErrors({});
+            setShowPassword(false);
+            setShowConfirm(false);
         } catch (error) {
             // error.response exists when the server replied (e.g. 422 validation error)
             // error.message is used when the server is unreachable
@@ -95,6 +105,7 @@ export default function RegisterPage() {
 
     return (
         <div className="relative overflow-hidden flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+            <FloatingIconsBackground />
             <WaveBackground />
             <div className="relative z-10 w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
                 {/* Brand wordmark — change the text/logo here */}
@@ -106,7 +117,7 @@ export default function RegisterPage() {
                         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-extrabold text-white">
                             V
                         </span>
-                        <span>VisionMarket</span>
+                        <span>Something</span>
                     </Link>
                 </div>
 
