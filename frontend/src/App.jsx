@@ -12,7 +12,7 @@ import Footer from './components/Footer'
 const App = () => {
   const checkServerHealth = async () => {
     try {
-      const response = await axiosClient.get("/health")
+      const response = await axiosClient.get("/health/")
       const data = response.data
       console.log("Backend connection successful! Data:", data);
     } catch (error) {

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from routes.PublicRoute import route as PublicRoute
+from .routes.PublicRoute import route as PublicRoute
+from .routes.AuthRoute import route as AuthRoute
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,5 +20,5 @@ app.add_middleware(
 )
 
 # add routes
-
 app.include_router(PublicRoute)
+app.include_router(AuthRoute)

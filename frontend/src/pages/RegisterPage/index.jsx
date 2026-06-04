@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { axiosClient } from "../../utils/axiosClient";
 import ParticleBackground from '../../components/ParticleBackground';
+import WaveBackground from "../../components/WaveBackground";
 
 /**
  * RegisterPage
@@ -21,6 +23,7 @@ export default function RegisterPage() {
     const [showConfirm, setShowConfirm] = useState(false);
     const [errors, setErrors] = useState({}); // { field: message }
     const [loading, setLoading] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
 
     // ---- Password strength (0..4) ---------------------------------------------
     const getStrength = (pwd) => {
@@ -56,17 +59,25 @@ export default function RegisterPage() {
         return next;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const next = validate();
         setErrors(next);
         if (Object.keys(next).length > 0) return;
 
         setLoading(true);
-        const payload = { name, email, password };
-        console.log("Registration payload:", payload);
-        // TODO: replace with axiosClient.post('/register', payload)
-        setTimeout(() => setLoading(false), 600); // simulate request for now
+        setSuccessMsg("");
+        try {
+            const response = await axiosClient.post("/auth/register", { name, email, password });
+            setSuccessMsg(response.data.msg);
+        } catch (error) {
+            // error.response exists when the server replied (e.g. 422 validation error)
+            // error.message is used when the server is unreachable
+            const msg = error.response?.data?.detail || error.message || "Registration failed.";
+            setErrors({ server: msg });
+        } finally {
+            setLoading(false);
+        }
     };
 
     // Stubbed OAuth. In production this redirects to the provider's consent
@@ -83,8 +94,9 @@ export default function RegisterPage() {
             : "border-gray-300 focus:border-blue-500 focus:ring-blue-500";
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-white-50 px-4 py-12">
-            <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
+        <div className="relative overflow-hidden flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+            <WaveBackground />
+            <div className="relative z-10 w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
                 {/* Brand wordmark — change the text/logo here */}
                 <div className="mb-6 text-center">
                     <Link
@@ -283,6 +295,18 @@ export default function RegisterPage() {
                             <p className="mt-1.5 text-sm font-medium text-red-600">{errors.terms}</p>
                         )}
                     </div>
+
+                    {/* Server feedback */}
+                    {successMsg && (
+                        <p className="rounded-lg bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700">
+                            {successMsg}
+                        </p>
+                    )}
+                    {errors.server && (
+                        <p className="rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700">
+                            {errors.server}
+                        </p>
+                    )}
 
                     {/* Submit */}
                     <button
