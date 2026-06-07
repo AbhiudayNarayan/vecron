@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import ParticleBackground from "../../components/ParticleBackground";
+import { useAuth } from "../../context/MainContext";
 
 /**
  * LoginPage
@@ -11,6 +12,7 @@ import ParticleBackground from "../../components/ParticleBackground";
  */
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // ── Controlled inputs ──────────────────────────────────────────────────────
   const [email,       setEmail]       = useState("");
@@ -44,13 +46,8 @@ export default function LoginPage() {
     try {
       const response = await axiosClient.post("/auth/login", { email, password });
 
-      // Store the JWT so axiosClient can attach it to future requests.
-      // rememberMe → localStorage (persists across tabs / browser restarts)
-      // no rememberMe → sessionStorage (cleared when tab closes)
-      const storage = rememberMe ? localStorage : sessionStorage;
-      storage.setItem("token", response.data.access_token);
-
-      navigate("/dashboard"); // change to wherever your post-login route is
+      login(response.data.access_token, rememberMe);
+      navigate("/dashboard");
     } catch (error) {
       const msg =
         error.response?.data?.detail ||

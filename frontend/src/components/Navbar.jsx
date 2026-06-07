@@ -1,7 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/MainContext';
 
 const Navbar = () => {
+    const { isLoggedIn, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
     return (
         <header className="text-gray-600 body-font bg-white">
             <div className="mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
@@ -12,15 +21,19 @@ const Navbar = () => {
                     <span className="ml-3 text-xl">Authentication</span>
                 </a>
                 <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-                    {/* Capitalized 'Link' and added the 'to' attribute */}
                     <Link to="/" className="mr-5 hover:text-gray-900">Home</Link>
-                    <Link to="/login" className="mr-5 hover:text-gray-900">Login</Link>
-                    <Link to="/register" className="mr-5 hover:text-gray-900">Register</Link>
-
+                    {isLoggedIn && <Link to="/dashboard" className="mr-5 hover:text-gray-900">Dashboard</Link>}
+                    {!isLoggedIn && <Link to="/login" className="mr-5 hover:text-gray-900">Login</Link>}
+                    {!isLoggedIn && <Link to="/register" className="mr-5 hover:text-gray-900">Register</Link>}
                 </nav>
-                <button className="inline-flex items-center bg-blue-600 border-0 py-1 px-3 focus:outline-none text-white cursor-pointer rounded text-base mt-4 md:mt-0">Logout
-                    
-                </button>
+                {isLoggedIn && (
+                    <button
+                        onClick={handleLogout}
+                        className="inline-flex items-center bg-blue-600 border-0 py-1 px-3 focus:outline-none text-white cursor-pointer rounded text-base mt-4 md:mt-0"
+                    >
+                        Logout
+                    </button>
+                )}
             </div>
         </header>
     );

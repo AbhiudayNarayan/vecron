@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm add *)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm config *)",
+      "Bash(Remove-Item -Recurse -Force node_modules)"
+    ]
+  }
+}

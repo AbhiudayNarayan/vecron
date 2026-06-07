@@ -1,18 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, EmailStr                          # ← NEW
-from sqlalchemy import select                                     # ← NEW
+from pydantic import BaseModel, EmailStr
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.models.User import User as UserModel, UserTable
-from src.config.db import AsyncSessionLocal
-from src.utils.hashing import hash_password, verify_password, create_access_token  # ← NEW (added two imports)
+from src.utils.hashing import hash_password, verify_password, create_access_token
+from src.utils.deps import get_db, get_current_user
 
 route = APIRouter(prefix="/api/v1/auth")
-
-
-async def get_db():
-    async with AsyncSessionLocal() as session:
-        yield session
 
 
 class LoginModel(BaseModel):                                      # ← NEW
@@ -52,5 +47,17 @@ async def loginView(data: LoginModel, db: AsyncSession = Depends(get_db)):  # �
     if not user or not verify_password(data.password, user.password):  # ← NEW
         raise HTTPException(status_code=401, detail="Invalid email or password.")  # ← NEW
                                                                   # ← NEW
-    token = create_access_token({"sub": str(user.id), "email": user.email})  # ← NEW
-    return {"access_token": token, "token_type": "bearer"}        # ← NEW
+    token = create_access_token({"sub": str(user.id), "email": user.email})
+    return {"access_token": token, "token_type": "bearer"}
+
+
+@route.get("/me")
+async def me(current_user: UserTable = Depends(get_current_user)):
+    return {
+        "id": current_user.id,
+        "name": current_user.name,
+        "email": current_user.email,
+        "address": current_user.address,
+        "mobile": current_user.mobile,
+        "created_at": current_user.created_at,
+    }

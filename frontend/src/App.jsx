@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-// IMPORTANT: Adjust the path below ('./api/axiosClient') to match where your file actually lives!
 import { axiosClient } from "./utils/axiosClient";
 
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import HomePage from './pages/HomePage'
+import DashboardPage from './pages/DashboardPage'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import ProtectedRoute from './components/ProtectedRoute'
 
 const App = () => {
   const checkServerHealth = async () => {
@@ -31,6 +32,7 @@ const App = () => {
         <Route path='/' Component={HomePage} />
         <Route path='/login' Component={LoginPage} />
         <Route path='/register' Component={RegisterPage} />
+        <Route path='/dashboard' element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
       </Routes>
       <Footer />{/* <h1>Footer</h1> */}
     </div>
