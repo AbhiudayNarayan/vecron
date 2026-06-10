@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la)",
+      "Bash(find \"D:\\\\myStart\\\\monorepo\" -name \"*.pt\")",
+      "Bash(python -c \"import ultralytics; print\\('ultralytics', ultralytics.__version__\\)\")",
+      "Bash(python -c \"import onnx; print\\('onnx', onnx.__version__\\)\")",
+      "Bash(python -c \"import torch; print\\('torch', torch.__version__\\)\")",
+      "Bash(D:\\\\yolo-env1\\\\Scripts\\\\python.exe *)",
+      "Bash(D:/yolo-env1/python.exe *)",
+      "Bash(conda run *)",
+      "Bash(conda env *)",
+      "Bash(PYTHONUTF8=1 PYTHONIOENCODING=utf-8 conda run -p \"D:/yolo-env1\" python verify_onnx.py)",
+      "Bash(PYTHONUTF8=1 conda run -p D:/yolo-env1 python -c ' *)",
+      "Bash(PYTHONUTF8=1 conda run -p \"D:/yolo-env1\" python _diag_raw.py)",
+      "Bash(rm -f _diag_raw.py)",
+      "Bash(PYTHONUTF8=1 conda run -p \"D:/yolo-env1\" python verify_onnx.py)",
+      "Bash(PYTHONUTF8=1 conda run -p \"D:/yolo-env1\" python _check_shape.py)",
+      "Read(//d/myStart/monorepo/backend/**)",
+      "Bash(PYTHONUTF8=1 conda run -p \"D:/yolo-env1\" python -c \"import ast; ast.parse\\(open\\('src/seed_models.py', encoding='utf-8'\\).read\\(\\)\\); print\\('syntax OK'\\)\")",
+      "PowerShell(Get-Content D:\\\\myStart\\\\monorepo\\\\backend\\\\.env | ForEach-Object { \\($_ -split '=',2\\)[0] })",
+      "PowerShell(\\(Get-Content D:\\\\myStart\\\\monorepo\\\\frontend\\\\node_modules\\\\onnxruntime-web\\\\package.json | ConvertFrom-Json\\).version; Test-Path D:\\\\myStart\\\\monorepo\\\\frontend\\\\pnpm-lock.yaml; Test-Path D:\\\\myStart\\\\monorepo\\\\frontend\\\\package-lock.json)",
+      "PowerShell($line = \\(Get-Content D:\\\\myStart\\\\monorepo\\\\backend\\\\.env | Where-Object { $_ -match '^SECRET_KEY=' }\\); $val = \\($line -split '=',2\\)[1]; \"length=$\\($val.Length\\)\"; \"is-known-default=$\\($val -eq 'change-this-before-production'\\)\"; \"looks-placeholder=$\\($val -match 'your|secret_key_here|changeme|change-this'\\)\")",
+      "PowerShell(Add-Content *)",
+      "PowerShell(\\(Get-Content D:\\\\myStart\\\\monorepo\\\\backend\\\\.env\\) | ForEach-Object { \\($_ -split '=',2\\)[0] }; \"---\"; \\(Get-Content D:\\\\myStart\\\\monorepo\\\\backend\\\\.env -Raw\\).Split\\(\"`n\"\\) | Select-Object -Last 2 | ForEach-Object { \\($_ -split '=',2\\)[0] })",
+      "PowerShell(Get-Content D:\\\\myStart\\\\monorepo\\\\backend\\\\.env | ForEach-Object { $k,$v = $_ -split '=',2; if \\($k -in 'BASE_URL','ALLOWED_ORIGINS'\\) { $_ } else { $k } })",
+      "PowerShell(Set-Location D:\\\\myStart\\\\monorepo\\\\backend; $env:SECRET_KEY = ''; .\\\\venv\\\\Scripts\\\\python.exe -c \"import sys; sys.tracebacklimit = 0; from src.utils import hashing\"; $env:SECRET_KEY = $null)",
+      "PowerShell(Set-Location *)"
+    ]
+  }
+}

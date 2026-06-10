@@ -82,3 +82,8 @@ logs/
 # ========================
 *.sqlite3
 *.db
+
+# ========================
+# Personal notes (not for the repo)
+# ========================
+DEVLOG.md

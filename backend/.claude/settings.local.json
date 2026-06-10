@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./venv/Scripts/python.exe -c \"import pydantic; print\\(pydantic.VERSION\\)\")",
+      "Bash(python -c \"import pydantic; print\\(pydantic.VERSION\\)\")",
+      "Bash(./venv/Scripts/python.exe --version)",
+      "Bash(./venv/Scripts/python.exe -c \"import src.app; import src.seed_models; from src.schemas.model_schema import ModelOut; from src.models.Model import ModelTable; print\\('OK: app, routes, schema, model import cleanly'\\); print\\('routes:', [r.path for r in src.app.app.routes if '/models' in getattr\\(r,'path',''\\)]\\)\")",
+      "Bash(./venv/Scripts/python.exe *)",
+      "Bash(curl -s -w \" [HTTP %{http_code}]\\\\n\" http://127.0.0.1:8000/api/v1/models/1)",
+      "Bash(curl -s -w \" [HTTP %{http_code}]\\\\n\" http://127.0.0.1:8000/api/v1/models/999)",
+      "Bash(curl -s -w \" [HTTP %{http_code}]\\\\n\" \"http://127.0.0.1:8000/api/v1/models?q=fire\")",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}, %{size_download} bytes, type=%{content_type}\\\\n\" http://127.0.0.1:8000/static/models/fire_smoke_v1.onnx)",
+      "Bash(curl -s -o /dev/null http://127.0.0.1:8000/)",
+      "Bash(powershell -Command 'Get-CimInstance Win32_Process -Filter \"CommandLine LIKE '\\\\''%uvicorn%src.app%'\\\\''\" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }')",
+      "PowerShell(Get-CimInstance *)",
+      "Read(//d/myStart/monorepo/**)",
+      "Bash(cat backend/.gitignore)",
+      "Bash(cat .gitignore)",
+      "Bash(ls -d */)",
+      "PowerShell(pnpm run *)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" \"http://localhost:5173/src/components/AuthLoaderButton.jsx\")",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" \"http://localhost:5173/src/pages/RegisterPage/index.jsx\")",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" \"http://localhost:5173/src/components/WaveBackground.jsx\")",
+      "Bash(npx vite *)",
+      "Bash(npx eslint *)",
+      "mcp__ide__getDiagnostics",
+      "Bash(python -c ' *)",
+      "Bash('D:\\\\yolo-env1\\\\python.exe' -c ' *)",
+      "Bash(python -m src.seed_models)",
+      "Bash(findstr /C:\"[seed]\")",
+      "Bash(python -m src.seed_models --force)"
+    ]
+  }
+}

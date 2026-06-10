@@ -5,6 +5,9 @@ import { axiosClient } from "./utils/axiosClient";
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import HomePage from './pages/HomePage'
+import DiscoverPage from './pages/DiscoverPage'
+import ModelDetailPage from './pages/ModelDetailPage'
+import ModelRunnerPage from './pages/ModelRunnerPage'
 import DashboardPage from './pages/DashboardPage'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -30,6 +33,9 @@ const App = () => {
       <Navbar /> {/* <h1>Header</h1> */}
       <Routes>
         <Route path='/' Component={HomePage} />
+        <Route path='/discover' Component={DiscoverPage} />
+        <Route path='/model/:id' Component={ModelDetailPage} />
+        <Route path='/model/:id/run' Component={ModelRunnerPage} />
         <Route path='/login' Component={LoginPage} />
         <Route path='/register' Component={RegisterPage} />
         <Route path='/dashboard' element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />

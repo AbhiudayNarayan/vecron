@@ -17,7 +17,7 @@ const ParticleBackground = () => {
       background: { color: { value: "transparent" } },
       fpsLimit: 60,
       particles: {
-        color: { value: "#2563eb" },
+        color: { value: "#0400fd" },
         links: {
           color: "#60a5fa",   // blue-400, not gray — gray-400 @ 0.3 over white = invisible
           distance: 150,
