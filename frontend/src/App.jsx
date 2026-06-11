@@ -9,6 +9,7 @@ import DiscoverPage from './pages/DiscoverPage'
 import ModelDetailPage from './pages/ModelDetailPage'
 import ModelRunnerPage from './pages/ModelRunnerPage'
 import DashboardPage from './pages/DashboardPage'
+import NotFoundPage from './pages/NotFoundPage'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -39,6 +40,7 @@ const App = () => {
         <Route path='/login' Component={LoginPage} />
         <Route path='/register' Component={RegisterPage} />
         <Route path='/dashboard' element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Footer />{/* <h1>Footer</h1> */}
     </div>

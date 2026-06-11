@@ -14,6 +14,7 @@ import { useOnnxModel } from "../../lib/inference/useOnnxModel";
 import { preprocess, runInference, postprocess } from "../../lib/inference/yoloEngine";
 import DetectionCanvas, { colorForClass } from "../../components/runner/DetectionCanvas";
 import VideoRunner from "../../components/runner/VideoRunner";
+import CameraRunner from "../../components/runner/CameraRunner";
 
 /**
  * ModelRunnerPage — reusable in-browser runner for ANY YOLO detection model
@@ -93,10 +94,15 @@ function Runner({ model }) {
     const { session, loading: modelLoading, error: modelError, ready, runDetection } =
         useOnnxModel(model.onnx_url);
 
-    // image | video | camera. Camera is Stage 3 (disabled).
     const [tab, setTab] = useState("image");
 
     const detected = labels.length > 0 ? labels.join(", ") : "objects";
+
+    const tabDescription = {
+        image: `Upload an image and this spots ${detected} for you — right here in your browser.`,
+        video: `Drop a video and this processes it once for ${detected}, then gives you an annotated clip to replay — right here in your browser.`,
+        camera: `Point the camera at a scene and this spots ${detected} live — everything runs on your device.`,
+    };
 
     return (
         <div>
@@ -107,13 +113,8 @@ function Runner({ model }) {
                     Run {model.name}
                 </h1>
             </div>
-            <p className="mt-2 text-gray-600">
-                {tab === "video"
-                    ? `Drop a video and this processes it once for ${detected}, then gives you an annotated clip to replay — right here in your browser.`
-                    : `Upload an image and this spots ${detected} for you — right here in your browser.`}
-            </p>
+            <p className="mt-2 text-gray-600">{tabDescription[tab]}</p>
 
-            {/* Input tabs — Image + Video active; Live Camera is Stage 3. */}
             <InputTabs tab={tab} setTab={setTab} />
 
             {/* Model loading / error banners (shared across tabs) */}
@@ -129,7 +130,7 @@ function Runner({ model }) {
                 </div>
             )}
 
-            {/* Active input — inactive tab unmounts, so VideoRunner cleans up. */}
+            {/* Active input — inactive tab unmounts, so stream/RAF cleanup runs. */}
             {tab === "image" && (
                 <ImageRunner
                     session={session}
@@ -143,6 +144,15 @@ function Runner({ model }) {
                     ready={ready}
                     runDetection={runDetection}
                     modelId={model.id}
+                    labels={labels}
+                    numClasses={numClasses}
+                    inputSize={inputSize}
+                />
+            )}
+            {tab === "camera" && (
+                <CameraRunner
+                    ready={ready}
+                    runDetection={runDetection}
                     labels={labels}
                     numClasses={numClasses}
                     inputSize={inputSize}
@@ -182,11 +192,18 @@ function ImageRunner({ session, labels, numClasses, inputSize }) {
     // idle | running | done | error
     const [runState, setRunState] = useState("idle");
     const [dragOver, setDragOver] = useState(false);
+    const [fileError, setFileError] = useState("");
     const fileInputRef = useRef(null);
 
     // Load a picked/dropped file into an HTMLImageElement.
     const handleFile = (file) => {
-        if (!file || !file.type.startsWith("image/")) return;
+        if (!file) return;
+        if (!file.type.startsWith("image/")) {
+            setFileError("Unsupported file. Please upload an image (JPG, PNG, or WebP).");
+            setTimeout(() => setFileError(""), 4000);
+            return;
+        }
+        setFileError("");
         const url = URL.createObjectURL(file);
         const img = new Image();
         img.onload = () => {
@@ -267,6 +284,9 @@ function ImageRunner({ session, labels, numClasses, inputSize }) {
                     className="hidden"
                     onChange={(e) => handleFile(e.target.files?.[0])}
                 />
+                {fileError && (
+                    <p className="mt-2 text-sm font-medium text-red-600">{fileError}</p>
+                )}
             </div>
 
             {/* Result status line */}
@@ -326,7 +346,7 @@ function ResultStatus({ runState, detections }) {
     return null;
 }
 
-/* ── Input tabs (Image active; Video / Live Camera coming soon) ───────── */
+/* ── Input tabs ──────────────────────────────────────────────────────── */
 
 function InputTabs({ tab, setTab }) {
     return (
@@ -343,8 +363,12 @@ function InputTabs({ tab, setTab }) {
                 active={tab === "video"}
                 onClick={() => setTab("video")}
             />
-            {/* Live Camera — Stage 3. */}
-            <TabButton icon={Camera} label="Live Camera" comingSoon />
+            <TabButton
+                icon={Camera}
+                label="Live Camera"
+                active={tab === "camera"}
+                onClick={() => setTab("camera")}
+            />
         </div>
     );
 }

@@ -28,7 +28,8 @@
       "Bash('D:\\\\yolo-env1\\\\python.exe' -c ' *)",
       "Bash(python -m src.seed_models)",
       "Bash(findstr /C:\"[seed]\")",
-      "Bash(python -m src.seed_models --force)"
+      "Bash(python -m src.seed_models --force)",
+      "Bash(python3 *)"
     ]
   }
 }

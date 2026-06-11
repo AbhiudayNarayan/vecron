@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import ParticleBackground from '../../components/ParticleBackground';
 import WaveBackground from "../../components/WaveBackground";
@@ -12,6 +12,8 @@ import FloatingIconsBackground from "../../components/FloatingIconsBackground";
  * client-side validation. Network calls are stubbed (console.log) for now.
  */
 export default function RegisterPage() {
+    const navigate = useNavigate();
+
     // ---- Controlled inputs -----------------------------------------------------
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -24,7 +26,6 @@ export default function RegisterPage() {
     const [showConfirm, setShowConfirm] = useState(false);
     const [errors, setErrors] = useState({}); // { field: message }
     const [loading, setLoading] = useState(false);
-    const [successMsg, setSuccessMsg] = useState("");
 
     // ---- Password strength (0..4) ---------------------------------------------
     const getStrength = (pwd) => {
@@ -67,19 +68,9 @@ export default function RegisterPage() {
         if (Object.keys(next).length > 0) return;
 
         setLoading(true);
-        setSuccessMsg("");
         try {
-            const response = await axiosClient.post("/auth/register", { name, email, password });
-            setSuccessMsg(response.data.msg);
-            // reset form on success
-            setName("");
-            setEmail("");
-            setPassword("");
-            setConfirmPassword("");
-            setAgreedToTerms(false);
-            setErrors({});
-            setShowPassword(false);
-            setShowConfirm(false);
+            await axiosClient.post("/auth/register", { name, email, password });
+            navigate("/login", { state: { registered: true } });
         } catch (error) {
             // error.response exists when the server replied (e.g. 422 validation error)
             // error.message is used when the server is unreachable
@@ -90,11 +81,7 @@ export default function RegisterPage() {
         }
     };
 
-    // Stubbed OAuth. In production this redirects to the provider's consent
-    // screen, e.g. window.location.href = `${API_BASE}/auth/${provider}`.
-    const handleSocialSignup = (provider) => {
-        console.log(`Sign up with ${provider}`);
-    };
+    // TODO: wire OAuth (Google + GitHub) — buttons disabled until then
 
     const inputBase =
         "w-full rounded-lg border px-4 py-2.5 text-gray-900 placeholder-gray-400 shadow-sm transition focus:outline-none focus:ring-2";
@@ -133,16 +120,18 @@ export default function RegisterPage() {
                 <div className="space-y-3">
                     <button
                         type="button"
-                        onClick={() => handleSocialSignup("google")}
-                        className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled
+                        title="Coming soon"
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 opacity-60 shadow-sm"
                     >
                         <GoogleIcon />
                         Sign up with Google
                     </button>
                     <button
                         type="button"
-                        onClick={() => handleSocialSignup("github")}
-                        className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled
+                        title="Coming soon"
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 opacity-60 shadow-sm"
                     >
                         <GitHubIcon />
                         Sign up with GitHub
@@ -292,15 +281,7 @@ export default function RegisterPage() {
                                 className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
                             <span>
-                                I agree to the{" "}
-                                <Link to="/terms" className="font-medium text-blue-600 hover:underline">
-                                    Terms of Service
-                                </Link>{" "}
-                                and{" "}
-                                <Link to="/privacy" className="font-medium text-blue-600 hover:underline">
-                                    Privacy Policy
-                                </Link>
-                                .
+                                I agree to the Terms of Service and Privacy Policy.
                             </span>
                         </label>
                         {errors.terms && (
@@ -309,11 +290,6 @@ export default function RegisterPage() {
                     </div>
 
                     {/* Server feedback */}
-                    {successMsg && (
-                        <p className="rounded-lg bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700">
-                            {successMsg}
-                        </p>
-                    )}
                     {errors.server && (
                         <p className="rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700">
                             {errors.server}

@@ -69,6 +69,7 @@ export default function VideoRunner({ ready, runDetection, modelId, labels, numC
     const [liveCount, setLiveCount] = useState(0);
     const [dragOver, setDragOver] = useState(false);
     const [processingLabel, setProcessingLabel] = useState("");
+    const [fileError, setFileError] = useState("");
 
     // A file dropped before the model worker is ready waits here until it is.
     const [queuedFile, setQueuedFile] = useState(null);
@@ -445,7 +446,13 @@ export default function VideoRunner({ ready, runDetection, modelId, labels, numC
     /* ── file intake ──────────────────────────────────────────────────────── */
 
     const handleFile = (file) => {
-        if (!file || !file.type.startsWith("video/")) return;
+        if (!file) return;
+        if (!file.type.startsWith("video/")) {
+            setFileError("Unsupported file. Please upload an MP4 or WebM video.");
+            setTimeout(() => setFileError(""), 4000);
+            return;
+        }
+        setFileError("");
         if (phaseRef.current === "processing") return; // ignore while busy
         if (!ready) {
             setQueuedFile(file); // model worker still loading — start when ready
@@ -518,10 +525,13 @@ export default function VideoRunner({ ready, runDetection, modelId, labels, numC
                         className="hidden"
                         onChange={(e) => handleFile(e.target.files?.[0])}
                     />
+                    {fileError && (
+                        <p className="mt-2 text-sm font-medium text-red-600">{fileError}</p>
+                    )}
                     {queuedFile && !ready && (
                         <div className="mt-3 flex items-center gap-2 text-sm font-medium text-indigo-600">
                             <Loader2 className="h-4 w-4 animate-spin" />
-                            Loading model… processing “{queuedFile.name}” will start automatically.
+                            Loading model… processing "{queuedFile.name}" will start automatically.
                         </div>
                     )}
                 </div>

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import ParticleBackground from "../../components/ParticleBackground";
 import { useAuth } from "../../context/MainContext";
@@ -12,6 +12,7 @@ import { useAuth } from "../../context/MainContext";
  */
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
   // ── Controlled inputs ──────────────────────────────────────────────────────
@@ -23,6 +24,14 @@ export default function LoginPage() {
   // ── UI state ───────────────────────────────────────────────────────────────
   const [errors,      setErrors]      = useState({});
   const [loading,     setLoading]     = useState(false);
+  const [registeredBanner, setRegisteredBanner] = useState(!!location.state?.registered);
+
+  // Clear location state so refreshing the page doesn't re-show the banner.
+  useEffect(() => {
+    if (location.state?.registered) {
+      window.history.replaceState({}, "");
+    }
+  }, []);
 
   // ── Validation ─────────────────────────────────────────────────────────────
   const validate = () => {
@@ -59,10 +68,7 @@ export default function LoginPage() {
     }
   };
 
-  // Stubbed OAuth — replace with window.location.href = `${API_BASE}/auth/google`
-  const handleSocialLogin = (provider) => {
-    console.log(`Login with ${provider}`);
-  };
+  // TODO: wire OAuth (Google + GitHub) — buttons disabled until then
 
   // ── Shared styles ──────────────────────────────────────────────────────────
   const inputBase =
@@ -102,20 +108,37 @@ export default function LoginPage() {
           </p>
         </div>
 
+        {/* Registered success banner */}
+        {registeredBanner && (
+          <div className="mb-6 flex items-center justify-between rounded-lg bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700">
+            Account created — please sign in.
+            <button
+              type="button"
+              onClick={() => setRegisteredBanner(false)}
+              className="ml-4 text-emerald-500 hover:text-emerald-700"
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
         {/* Social login */}
         <div className="space-y-3">
           <button
             type="button"
-            onClick={() => handleSocialLogin("google")}
-            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled
+            title="Coming soon"
+            className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 opacity-60 shadow-sm"
           >
             <GoogleIcon />
             Continue with Google
           </button>
           <button
             type="button"
-            onClick={() => handleSocialLogin("github")}
-            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled
+            title="Coming soon"
+            className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 opacity-60 shadow-sm"
           >
             <GitHubIcon />
             Continue with GitHub
@@ -164,13 +187,9 @@ export default function LoginPage() {
               <label htmlFor="password" className="text-sm font-medium text-gray-700">
                 Password
               </label>
-              {/* Forgot password — wire to /forgot-password route when ready */}
-              <Link
-                to="/forgot-password"
-                className="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline"
-              >
-                Forgot password?
-              </Link>
+              <span className="cursor-default text-xs text-gray-400">
+                Forgot password? (coming soon)
+              </span>
             </div>
             <div className="relative">
               <input
