@@ -87,9 +87,10 @@ export default function ModelRunnerPage() {
 function Runner({ model }) {
     const labels = Array.isArray(model.labels) ? model.labels : [];
     const numClasses = labels.length;
-    // Smaller default input → fewer pixels to crunch per frame. Keeps the model's
-    // own input_size if the API returns it explicitly; only the fallback drops.
-    const inputSize = model.input_size || 416;
+    // Fallback must match the export size: models are exported with dynamic=False
+    // at 640, so feeding a smaller tensor would throw, not degrade (640 is also
+    // the DB default for input_size).
+    const inputSize = model.input_size || 640;
 
     const { session, loading: modelLoading, error: modelError, ready, runDetection } =
         useOnnxModel(model.onnx_url);

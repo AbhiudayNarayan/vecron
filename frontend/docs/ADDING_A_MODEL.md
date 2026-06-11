@@ -108,45 +108,45 @@ served at `/static/models/<name>.onnx`.)
 ### 2d. Add a catalog entry
 
 Models live in the `models` table and are seeded by
-`backend/src/seed_models.py`. Add a new row using the **exact same dict shape**
-as the existing seed. `labels` is stored as a **JSON string** (the API parses it
-back into an array), and `onnx_url` is built from `BASE_URL` so only one env var
-changes between dev and prod:
+`backend/src/seed_models.py`. The script holds a `SEED_MODELS` list of dicts and
+idempotently upserts each one by `name` — add your model as a new dict in that
+list. `labels` is stored as a **JSON string** (the API parses it back into an
+array), and `onnx_url` is built from `BASE_URL` so only one env var changes
+between dev and prod:
 
 ```python
-model = ModelTable(
-    name="Your Model Name",
-    description="One or two sentences on what it detects and where it's useful.",
-    task_type="detection",
-    industry="safety",                # free-form category
-    accuracy=None,                    # measured mAP once you have it, else None
-    onnx_url=f"{BASE_URL}/static/models/<name>.onnx",
-    input_size=640,                   # MUST equal the imgsz you exported with
-    labels='["class0", "class1"]',    # JSON string; order = model class indices
-    license="unknown",                # confirm the base model's license
-    is_free=True,                     # gating flag
-)
+SEED_MODELS = [
+    # ...existing models...
+    {
+        "name": "Your Model Name",
+        "description": "One or two sentences on what it detects and where it's useful.",
+        "task_type": "detection",
+        "industry": "safety",                # free-form category
+        "accuracy": None,                    # measured mAP once you have it, else None
+        "onnx_url": f"{BASE_URL}/static/models/<name>.onnx",
+        "input_size": 640,                   # MUST equal the imgsz you exported with
+        "labels": '["class0", "class1"]',    # JSON string; order = model class indices
+        "license": "unknown",                # confirm the base model's license
+        "is_free": True,                     # gating flag
+        # True ONLY if the license permits paid network-served inference.
+        # AGPL-3.0 / unknown licenses must stay False (free, in-browser only).
+        "cloud_eligible": False,
+    },
+]
 ```
 
 > **Labels order is load-bearing.** `labels[0]` must be the class the model emits
 > as index `0`. Getting this wrong swaps every label (e.g. "fire" boxes labelled
 > "smoke"). Check your training `data.yaml` `names:` order.
 
-The shipped seed script only inserts one specific model and skips if it exists.
-To seed several, generalise it into a list, e.g.:
+> **License gate.** Ultralytics-derived models are typically **AGPL-3.0** (check
+> the ONNX metadata). That's fine for the free in-browser tier, but such models
+> must keep `cloud_eligible=False` — serving them from a paid cloud endpoint is
+> the AGPL network-use scenario.
 
-```python
-SEED_MODELS = [
-    { "name": "...", "description": "...", "task_type": "detection",
-      "industry": "...", "onnx_url": f"{BASE_URL}/static/models/<name>.onnx",
-      "input_size": 640, "labels": '["...","..."]', "license": "unknown",
-      "is_free": True },
-    # ...add more dicts here
-]
-```
-
-…and loop, inserting each by `name` if it doesn't already exist (keep it
-idempotent so re-running is safe).
+Re-running the seed is safe: existing rows are matched by `name`, descriptive
+fields are synced in place, and `onnx_url` is only overwritten when you pass
+`--force`.
 
 ### 2e. Run the seed script
 
@@ -154,6 +154,7 @@ From the `backend/` directory:
 
 ```bash
 python -m src.seed_models
+# add --force to also update onnx_url on rows whose URL changed
 ```
 
 (Set `BASE_URL` in the environment / `.env` first if you're not on

@@ -25,7 +25,8 @@
       "PowerShell(\\(Get-Content D:\\\\myStart\\\\monorepo\\\\backend\\\\.env\\) | ForEach-Object { \\($_ -split '=',2\\)[0] }; \"---\"; \\(Get-Content D:\\\\myStart\\\\monorepo\\\\backend\\\\.env -Raw\\).Split\\(\"`n\"\\) | Select-Object -Last 2 | ForEach-Object { \\($_ -split '=',2\\)[0] })",
       "PowerShell(Get-Content D:\\\\myStart\\\\monorepo\\\\backend\\\\.env | ForEach-Object { $k,$v = $_ -split '=',2; if \\($k -in 'BASE_URL','ALLOWED_ORIGINS'\\) { $_ } else { $k } })",
       "PowerShell(Set-Location D:\\\\myStart\\\\monorepo\\\\backend; $env:SECRET_KEY = ''; .\\\\venv\\\\Scripts\\\\python.exe -c \"import sys; sys.tracebacklimit = 0; from src.utils import hashing\"; $env:SECRET_KEY = $null)",
-      "PowerShell(Set-Location *)"
+      "PowerShell(Set-Location *)",
+      "Bash(conda info *)"
     ]
   }
 }

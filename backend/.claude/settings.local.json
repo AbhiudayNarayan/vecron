@@ -29,7 +29,9 @@
       "Bash(python -m src.seed_models)",
       "Bash(findstr /C:\"[seed]\")",
       "Bash(python -m src.seed_models --force)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(where python *)",
+      "Bash(D:\\\\myStart\\\\monorepo\\\\backend\\\\venv\\\\Scripts\\\\python.exe *)"
     ]
   }
 }

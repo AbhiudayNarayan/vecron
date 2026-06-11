@@ -21,6 +21,7 @@ BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 SEED_NAME = "Fire & Smoke Detection"
 GARBAGE_NAME = "Garbage Classification"
+POT_HOLE_NAME = "Pothole Detection"
 
 # Descriptive columns kept in sync on every run (id and name are never touched;
 # onnx_url is only updated when --force is passed — see upsert()).
@@ -62,6 +63,23 @@ SEED_MODELS = [
         "license": "unknown",  # NOTE: onnx metadata reports AGPL-3.0
         "is_free": True,
         # AGPL-3.0 per onnx metadata — free, in-browser tier only. Never cloud.
+        "cloud_eligible": False,
+    },
+    {
+        "name": POT_HOLE_NAME,
+        "description": (
+            "Detects potholes in road images and video. Useful for road "
+            "maintenance inspection and automated damage reporting."
+        ),
+        "task_type": "detection",
+        "industry": "infrastructure",
+        "accuracy": None,
+        "onnx_url": f"{BASE_URL}/static/models/pot_hole_better.onnx",
+        "input_size": 640,
+        "labels": '["pothole"]',
+        "license": "AGPL-3.0",
+        "is_free": True,
+        # AGPL-3.0 — free, in-browser tier only.
         "cloud_eligible": False,
     },
 ]
