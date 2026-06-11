@@ -31,7 +31,12 @@
       "Bash(python -m src.seed_models --force)",
       "Bash(python3 *)",
       "Bash(where python *)",
-      "Bash(D:\\\\myStart\\\\monorepo\\\\backend\\\\venv\\\\Scripts\\\\python.exe *)"
+      "Bash(D:\\\\myStart\\\\monorepo\\\\backend\\\\venv\\\\Scripts\\\\python.exe *)",
+      "Bash(curl -s http://localhost:8000/health)",
+      "Bash(curl -s http://localhost:8000/)",
+      "Bash(curl *)",
+      "Bash(\"D:\\\\myStart\\\\monorepo\\\\backend\\\\venv\\\\Scripts\\\\uvicorn.exe\" src.app:app --port 8000)",
+      "Bash(echo \"Started PID $!\")"
     ]
   }
 }

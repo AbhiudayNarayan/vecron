@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from .routes.PublicRoute import route as PublicRoute
 from .routes.AuthRoute import route as AuthRoute
 from .routes.ModelRoute import route as ModelRoute
+from .routes.ReportRoute import route as ReportRoute
 from .config.db import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -40,3 +41,4 @@ app.mount("/static", StaticFiles(directory="src/statics"), name="static")
 app.include_router(PublicRoute)
 app.include_router(AuthRoute)
 app.include_router(ModelRoute)
+app.include_router(ReportRoute)
