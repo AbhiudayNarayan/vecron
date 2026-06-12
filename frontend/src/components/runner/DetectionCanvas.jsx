@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 
 /**
  * DetectionCanvas — draws a source image to a <canvas> and overlays the
@@ -63,7 +63,10 @@ export function drawDetections(ctx, detections, labels = [], width) {
     }
 }
 
-export default function DetectionCanvas({ image, detections = [], labels = [] }) {
+const DetectionCanvas = forwardRef(function DetectionCanvas(
+    { image, detections = [], labels = [] },
+    forwardedRef
+) {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -82,10 +85,20 @@ export default function DetectionCanvas({ image, detections = [], labels = [] })
         drawDetections(ctx, detections, labels, width);
     }, [image, detections, labels]);
 
+    // Keep the internal ref (used for drawing) and expose the node to the parent
+    // so it can snapshot the annotated frame (e.g. for "Report this issue").
+    const setRef = (node) => {
+        canvasRef.current = node;
+        if (typeof forwardedRef === "function") forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
+    };
+
     return (
         <canvas
-            ref={canvasRef}
+            ref={setRef}
             className="h-auto w-full rounded-lg border border-gray-200 bg-gray-100"
         />
     );
-}
+});
+
+export default DetectionCanvas;

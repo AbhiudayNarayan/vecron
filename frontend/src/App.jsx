@@ -9,6 +9,7 @@ import DiscoverPage from './pages/DiscoverPage'
 import ModelDetailPage from './pages/ModelDetailPage'
 import ModelRunnerPage from './pages/ModelRunnerPage'
 import DashboardPage from './pages/DashboardPage'
+import PublicFeedPage from './pages/PublicFeedPage'
 import NotFoundPage from './pages/NotFoundPage'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -35,6 +36,7 @@ const App = () => {
       <Routes>
         <Route path='/' Component={HomePage} />
         <Route path='/discover' Component={DiscoverPage} />
+        <Route path='/feed' Component={PublicFeedPage} />
         <Route path='/model/:id' Component={ModelDetailPage} />
         <Route path='/model/:id/run' Component={ModelRunnerPage} />
         <Route path='/login' Component={LoginPage} />

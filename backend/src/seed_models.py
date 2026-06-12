@@ -22,6 +22,7 @@ BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 SEED_NAME = "Fire & Smoke Detection"
 GARBAGE_NAME = "Garbage Classification"
 POT_HOLE_NAME = "Pothole Detection"
+GARBAGE_DETECTION_NAME = "Garbage Detection"
 
 # Descriptive columns kept in sync on every run (id and name are never touched;
 # onnx_url is only updated when --force is passed — see upsert()).
@@ -80,6 +81,22 @@ SEED_MODELS = [
         "license": "AGPL-3.0",
         "is_free": True,
         # AGPL-3.0 — free, in-browser tier only.
+        "cloud_eligible": False,
+    },
+    {
+        "name": GARBAGE_DETECTION_NAME,
+        "description": (
+            "Detects garbage overflow, bins, and loose garbage in images and video. "
+            "Useful for smart city waste monitoring and cleanliness audits."
+        ),
+        "task_type": "detection",
+        "industry": "waste management",
+        "accuracy": None,
+        "onnx_url": f"{BASE_URL}/static/models/garbagedetection.onnx",
+        "input_size": 640,
+        "labels": '["overflow", "garbage_bin", "garbage"]',
+        "license": "unknown",
+        "is_free": True,
         "cloud_eligible": False,
     },
 ]

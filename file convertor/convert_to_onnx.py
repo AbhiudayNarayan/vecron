@@ -65,7 +65,7 @@ def main():
 
     parser.add_argument(
         "--weights",
-        default=r"D:\myStart\monorepo\file convertor\file\pot_hole_better.pt",   # ← changed default to pothole model
+        default=r"D:\myStart\monorepo\file convertor\file\garbagedetection.pt",
         help="Path to the .pt weights file (relative or absolute)",
     )
     parser.add_argument(

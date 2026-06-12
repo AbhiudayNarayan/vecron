@@ -36,7 +36,20 @@
       "Bash(curl -s http://localhost:8000/)",
       "Bash(curl *)",
       "Bash(\"D:\\\\myStart\\\\monorepo\\\\backend\\\\venv\\\\Scripts\\\\uvicorn.exe\" src.app:app --port 8000)",
-      "Bash(echo \"Started PID $!\")"
+      "Bash(echo \"Started PID $!\")",
+      "Bash(echo \"exit: $?\")",
+      "PowerShell(python -m pytest tests/test_reports.py -q)",
+      "PowerShell(npx --prefix ..\\\\frontend eslint ..\\\\frontend\\\\src\\\\pages\\\\DashboardPage\\\\index.jsx; Write-Output \"exit=$LASTEXITCODE\")",
+      "Bash(python -m pytest tests/test_reports.py -q)",
+      "Bash(nohup ./venv/Scripts/python.exe -m uvicorn src.app:app --host 127.0.0.1 --port 8000)",
+      "Bash(echo \"started pid $!\")",
+      "Bash(command -v chrome chromium \"C:/Program Files/Google/Chrome/Application/chrome.exe\")",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Bash(rm -f /d/myStart/monorepo/feed_check.png)",
+      "Bash('/c/Program Files/Google/Chrome/Application/chrome.exe' --headless=new --disable-gpu --hide-scrollbars --window-size=1280,1400 --virtual-time-budget=8000 '--screenshot=D:\\\\myStart\\\\monorepo\\\\feed_check.png' http://localhost:5173/feed)",
+      "Bash(echo \"exit:$?\")",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(Get-Process *)"
     ]
   }
 }

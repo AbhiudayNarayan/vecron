@@ -8,13 +8,16 @@ import {
     Camera,
     Loader2,
     Sparkles,
+    Flag,
 } from "lucide-react";
 import { axiosClient } from "../../utils/axiosClient";
+import { useAuth } from "../../context/MainContext";
 import { useOnnxModel } from "../../lib/inference/useOnnxModel";
 import { preprocess, runInference, postprocess } from "../../lib/inference/yoloEngine";
 import DetectionCanvas, { colorForClass } from "../../components/runner/DetectionCanvas";
 import VideoRunner from "../../components/runner/VideoRunner";
 import CameraRunner from "../../components/runner/CameraRunner";
+import ReportModal from "../../components/reports/ReportModal";
 
 /**
  * ModelRunnerPage — reusable in-browser runner for ANY YOLO detection model
@@ -94,10 +97,50 @@ function Runner({ model }) {
 
     const { session, loading: modelLoading, error: modelError, ready, runDetection } =
         useOnnxModel(model.onnx_url);
+    const { isLoggedIn } = useAuth();
 
     const [tab, setTab] = useState("image");
+    // Lifted from ImageRunner so the page-level "Report this issue" button can
+    // tell whether the last image pass actually found something.
+    const [imageDetections, setImageDetections] = useState(null);
+    const [reportOpen, setReportOpen] = useState(false);
+    // The annotated canvas (boxes + labels) drawn by ImageRunner's DetectionCanvas.
+    // Snapshotted into a File when the report modal opens, so every report carries
+    // proof the model ran.
+    const canvasRef = useRef(null);
+    const [annotatedImage, setAnnotatedImage] = useState(null);
+
+    // Open the report modal, attaching a snapshot of the annotated frame.
+    // toBlob is async — open the modal from inside the callback. If the canvas is
+    // missing/empty we still open (just without an auto-attached image).
+    const openReport = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) {
+            setAnnotatedImage(null);
+            setReportOpen(true);
+            return;
+        }
+        canvas.toBlob(
+            (blob) => {
+                setAnnotatedImage(
+                    blob
+                        ? new File([blob], `annotated_${Date.now()}.jpg`, {
+                              type: "image/jpeg",
+                          })
+                        : null
+                );
+                setReportOpen(true);
+            },
+            "image/jpeg",
+            0.9
+        );
+    };
 
     const detected = labels.length > 0 ? labels.join(", ") : "objects";
+
+    // Only offer reporting from the image tab, and only once a detection landed.
+    const canReport =
+        isLoggedIn && tab === "image" && Array.isArray(imageDetections) && imageDetections.length > 0;
 
     const tabDescription = {
         image: `Upload an image and this spots ${detected} for you — right here in your browser.`,
@@ -138,6 +181,8 @@ function Runner({ model }) {
                     labels={labels}
                     numClasses={numClasses}
                     inputSize={inputSize}
+                    onDetections={setImageDetections}
+                    canvasRef={canvasRef}
                 />
             )}
             {tab === "video" && (
@@ -159,6 +204,29 @@ function Runner({ model }) {
                     inputSize={inputSize}
                 />
             )}
+
+            {/* Report trigger — secondary action; inference itself is the primary one.
+                Shown below the result area once a logged-in user has a detection. */}
+            {canReport && (
+                <div className="mt-6">
+                    <button
+                        type="button"
+                        onClick={openReport}
+                        className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition hover:border-blue-400 hover:text-blue-600"
+                    >
+                        <Flag className="h-4 w-4" />
+                        Report this issue
+                    </button>
+                </div>
+            )}
+
+            <ReportModal
+                modelId={model.id}
+                modelName={model.name}
+                isOpen={reportOpen}
+                onClose={() => setReportOpen(false)}
+                annotatedImage={annotatedImage}
+            />
 
             {/* Legend of classes (generated from labels, not hardcoded) */}
             {labels.length > 0 && (
@@ -186,7 +254,7 @@ function Runner({ model }) {
 
 /* ── Image tab ────────────────────────────────────────────────────────── */
 
-function ImageRunner({ session, labels, numClasses, inputSize }) {
+function ImageRunner({ session, labels, numClasses, inputSize, onDetections, canvasRef }) {
     // The currently loaded <img> element (source for both inference + canvas).
     const [image, setImage] = useState(null);
     const [detections, setDetections] = useState(null); // null = not run yet
@@ -249,6 +317,11 @@ function ImageRunner({ session, labels, numClasses, inputSize }) {
         };
     }, [image, session, inputSize, numClasses]);
 
+    // Surface the latest detections to the page so it can offer "Report this issue".
+    useEffect(() => {
+        onDetections?.(detections);
+    }, [detections, onDetections]);
+
     return (
         <div>
             {/* Upload area */}
@@ -301,6 +374,7 @@ function ImageRunner({ session, labels, numClasses, inputSize }) {
             {image && (
                 <div className="mt-4">
                     <DetectionCanvas
+                        ref={canvasRef}
                         image={image}
                         detections={detections || []}
                         labels={labels}

@@ -23,6 +23,7 @@ const Navbar = () => {
                 <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
                     <Link to="/" className="mr-5 hover:text-gray-900">Home</Link>
                     <Link to="/discover" className="mr-5 hover:text-gray-900">Browse</Link>
+                    <Link to="/feed" className="mr-5 hover:text-gray-900">Public Feed</Link>
                     {isLoggedIn && <Link to="/dashboard" className="mr-5 hover:text-gray-900">Dashboard</Link>}
                     {!isLoggedIn && <Link to="/login" className="mr-5 hover:text-gray-900">Login</Link>}
                     {!isLoggedIn && <Link to="/register" className="mr-5 hover:text-gray-900">Register</Link>}

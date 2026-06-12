@@ -23,6 +23,7 @@ class ReportImageOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    report_id: int
     image_url: str
     image_type: str
     is_annotated: bool = False
