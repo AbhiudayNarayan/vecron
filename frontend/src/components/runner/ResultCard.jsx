@@ -57,19 +57,19 @@ export default function ResultCard({ result, onRemove }) {
     };
 
     return (
-        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="card p-4">
             <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                    <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                        <Film className="h-4 w-4 shrink-0 text-indigo-600" />
+                    <div className="flex items-center gap-2 text-sm font-semibold text-ink">
+                        <Film className="h-4 w-4 shrink-0 text-accent" />
                         <span className="truncate" title={label}>
                             {label}
                         </span>
                     </div>
-                    <p className="mt-0.5 text-xs text-gray-500">
+                    <p className="mt-0.5 text-xs text-muted">
                         {new Date(createdAt).toLocaleString()}
                         {approach === "stored" && (
-                            <span className="ml-2 rounded bg-amber-50 px-1.5 py-0.5 font-medium text-amber-700">
+                            <span className="badge badge-warning ml-2 px-1.5 py-0.5">
                                 replay overlay
                             </span>
                         )}
@@ -79,7 +79,7 @@ export default function ResultCard({ result, onRemove }) {
                 <button
                     type="button"
                     onClick={() => onRemove(result.id)}
-                    className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-gray-400 transition hover:bg-gray-50 hover:text-red-600"
+                    className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-faint transition hover:bg-surface-2 hover:text-danger"
                     title="Remove this result"
                 >
                     <Trash2 className="h-4 w-4" />
@@ -93,7 +93,7 @@ export default function ResultCard({ result, onRemove }) {
                         src={url}
                         controls
                         playsInline
-                        className="h-auto w-full rounded-lg border border-gray-200 bg-gray-900"
+                        className="h-auto w-full rounded-lg border border-line bg-surface-invert"
                     />
                 ) : (
                     <StoredReplay result={result} />
@@ -112,7 +112,7 @@ export default function ResultCard({ result, onRemove }) {
                     <a
                         href={url}
                         download={downloadName}
-                        className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:border-blue-400 hover:text-blue-600"
+                        className="btn btn-secondary btn-sm"
                     >
                         <Download className="h-4 w-4" />
                         Download annotated video
@@ -122,12 +122,12 @@ export default function ResultCard({ result, onRemove }) {
                         type="button"
                         onClick={handleDownloadStored}
                         disabled={baking}
-                        className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:border-blue-400 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="btn btn-secondary btn-sm"
                     >
                         {baking ? (
                             <>
                                 <Loader2 className="h-4 w-4 animate-spin" />
-                                Preparing annotated video…
+                                Preparing annotated video...
                             </>
                         ) : (
                             <>
@@ -147,14 +147,14 @@ export default function ResultCard({ result, onRemove }) {
 function DetectionSummary({ summary }) {
     if (!summary || summary.total === 0) {
         return (
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm font-medium text-gray-600">
+            <div className="rounded-lg border border-line bg-surface-2 p-3 text-sm font-medium text-muted">
                 No objects detected in this video.
             </div>
         );
     }
     return (
-        <div className="rounded-lg border border-green-100 bg-green-50 p-3">
-            <p className="text-sm font-semibold text-green-800">
+        <div className="rounded-lg border border-success-soft bg-success-soft p-3">
+            <p className="text-sm font-semibold text-success">
                 Found{" "}
                 {summary.parts
                     .map((p) => `${p.count} ${p.label}`)
@@ -164,7 +164,7 @@ function DetectionSummary({ summary }) {
                 {summary.parts.map((p) => (
                     <span
                         key={p.classId}
-                        className="inline-flex items-center gap-1.5 rounded-md bg-white px-2 py-0.5 text-xs font-medium text-gray-700 ring-1 ring-gray-100"
+                        className="inline-flex items-center gap-1.5 rounded-md bg-surface px-2 py-0.5 text-xs font-medium text-ink ring-1 ring-line"
                     >
                         <span
                             className="h-2.5 w-2.5 rounded-sm"
@@ -174,7 +174,7 @@ function DetectionSummary({ summary }) {
                     </span>
                 ))}
             </div>
-            <p className="mt-2 text-[11px] text-gray-500">
+            <p className="mt-2 text-[11px] text-muted">
                 Peak simultaneous detections per class across the clip.
             </p>
         </div>
@@ -255,7 +255,7 @@ function StoredReplay({ result }) {
                 src={url}
                 controls
                 playsInline
-                className="h-auto w-full rounded-lg border border-gray-200 bg-gray-900"
+                className="h-auto w-full rounded-lg border border-line bg-surface-invert"
             />
             {/* Overlay: natural-res canvas scaled to the video's displayed width,
                 so stored boxes line up exactly like the static image path. */}

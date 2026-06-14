@@ -1,44 +1,134 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Menu, X, LogOut } from 'lucide-react';
 import { useAuth } from '../context/MainContext';
+import BrandMark from './BrandMark';
 
 const Navbar = () => {
     const { isLoggedIn, logout } = useAuth();
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
 
     const handleLogout = () => {
+        setOpen(false);
         logout();
         navigate('/login');
     };
 
+    const links = [
+        { to: '/', label: 'Home', end: true },
+        { to: '/discover', label: 'Browse' },
+        { to: '/feed', label: 'Public Feed' },
+        ...(isLoggedIn ? [{ to: '/dashboard', label: 'Dashboard' }] : []),
+    ];
+
+    const linkClass = ({ isActive }) =>
+        [
+            'rounded-md px-3 py-2 text-sm font-semibold transition-colors',
+            isActive
+                ? 'bg-primary-soft text-primary-soft-ink'
+                : 'text-muted hover:bg-surface-2 hover:text-ink',
+        ].join(' ');
+
     return (
-        <header className="text-gray-600 body-font bg-white">
-            <div className="mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-                <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                    </svg>
-                    <span className="ml-3 text-xl">Kriya</span>
-                </a>
-                <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-                    <Link to="/" className="mr-5 hover:text-gray-900">Home</Link>
-                    <Link to="/discover" className="mr-5 hover:text-gray-900">Browse</Link>
-                    <Link to="/feed" className="mr-5 hover:text-gray-900">Public Feed</Link>
-                    {isLoggedIn && <Link to="/dashboard" className="mr-5 hover:text-gray-900">Dashboard</Link>}
-                    {!isLoggedIn && <Link to="/login" className="mr-5 hover:text-gray-900">Login</Link>}
-                    {!isLoggedIn && <Link to="/register" className="mr-5 hover:text-gray-900">Register</Link>}
+        <header className="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur">
+            <div className="container-page flex h-16 items-center justify-between gap-4">
+                {/* Brand */}
+                <Link
+                    to="/"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2.5"
+                    aria-label="Kriya home"
+                >
+                    <BrandMark className="h-9 w-9" />
+                    <span className="text-xl font-extrabold tracking-tight text-ink">Kriya</span>
+                </Link>
+
+                {/* Desktop nav */}
+                <nav className="hidden items-center gap-1 md:flex">
+                    {links.map((l) => (
+                        <NavLink key={l.to} to={l.to} end={l.end} className={linkClass}>
+                            {l.label}
+                        </NavLink>
+                    ))}
                 </nav>
-                {isLoggedIn && (
-                    <button
-                        onClick={handleLogout}
-                        className="inline-flex items-center bg-blue-600 border-0 py-1 px-3 focus:outline-none text-white cursor-pointer rounded text-base mt-4 md:mt-0"
-                    >
-                        Logout
-                    </button>
-                )}
+
+                {/* Desktop auth actions */}
+                <div className="hidden items-center gap-2 md:flex">
+                    {isLoggedIn ? (
+                        <button onClick={handleLogout} className="btn btn-ghost btn-sm">
+                            <LogOut className="h-4 w-4" />
+                            Logout
+                        </button>
+                    ) : (
+                        <>
+                            <Link to="/login" className="btn btn-ghost btn-sm">
+                                Login
+                            </Link>
+                            <Link to="/register" className="btn btn-primary btn-sm">
+                                Get started
+                            </Link>
+                        </>
+                    )}
+                </div>
+
+                {/* Mobile toggle */}
+                <button
+                    type="button"
+                    onClick={() => setOpen((v) => !v)}
+                    className="btn btn-ghost btn-sm md:hidden"
+                    aria-label={open ? 'Close menu' : 'Open menu'}
+                    aria-expanded={open}
+                >
+                    {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </button>
             </div>
+
+            {/* Mobile menu */}
+            {open && (
+                <nav className="border-t border-line bg-surface md:hidden">
+                    <div className="container-page flex flex-col gap-1 py-3">
+                        {links.map((l) => (
+                            <NavLink
+                                key={l.to}
+                                to={l.to}
+                                end={l.end}
+                                onClick={() => setOpen(false)}
+                                className={linkClass}
+                            >
+                                {l.label}
+                            </NavLink>
+                        ))}
+                        <div className="mt-2 flex flex-col gap-2 border-t border-line pt-3">
+                            {isLoggedIn ? (
+                                <button onClick={handleLogout} className="btn btn-secondary btn-block">
+                                    <LogOut className="h-4 w-4" />
+                                    Logout
+                                </button>
+                            ) : (
+                                <>
+                                    <Link
+                                        to="/login"
+                                        onClick={() => setOpen(false)}
+                                        className="btn btn-secondary btn-block"
+                                    >
+                                        Login
+                                    </Link>
+                                    <Link
+                                        to="/register"
+                                        onClick={() => setOpen(false)}
+                                        className="btn btn-primary btn-block"
+                                    >
+                                        Get started
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </nav>
+            )}
         </header>
     );
-}
+};
 
 export default Navbar;

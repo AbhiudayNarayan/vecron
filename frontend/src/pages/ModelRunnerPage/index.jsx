@@ -58,11 +58,11 @@ export default function ModelRunnerPage() {
     }, [id]);
 
     return (
-        <main className="min-h-screen bg-gray-50 text-gray-900">
-            <div className="mx-auto max-w-3xl px-6 py-12">
+        <main className="flex-1 bg-canvas text-ink">
+            <div className="mx-auto max-w-3xl px-5 py-12 md:py-16">
                 <Link
                     to={`/model/${id}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 transition hover:text-blue-600"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition hover:text-accent"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Back to model
@@ -152,24 +152,24 @@ function Runner({ model }) {
         <div>
             {/* Title */}
             <div className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-indigo-600" />
+                <Sparkles className="h-5 w-5 text-accent" />
                 <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
                     Run {model.name}
                 </h1>
             </div>
-            <p className="mt-2 text-gray-600">{tabDescription[tab]}</p>
+            <p className="mt-2 text-muted">{tabDescription[tab]}</p>
 
             <InputTabs tab={tab} setTab={setTab} />
 
             {/* Model loading / error banners (shared across tabs) */}
             {modelLoading && (
-                <div className="mt-6 flex items-center gap-3 rounded-lg border border-indigo-100 bg-indigo-50 p-4 text-indigo-700">
+                <div className="mt-6 flex items-center gap-3 rounded-lg border border-brand-200 bg-primary-soft p-4 text-accent-strong">
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    <span className="text-sm font-medium">Loading the model…</span>
+                    <span className="text-sm font-medium">Loading the model...</span>
                 </div>
             )}
             {modelError && (
-                <div className="mt-6 rounded-lg border border-red-100 bg-red-50 p-4 text-sm font-medium text-red-700">
+                <div className="mt-6 rounded-lg border border-danger-soft bg-danger-soft p-4 text-sm font-medium text-danger">
                     Couldn't load the model file. Check your connection and try again.
                 </div>
             )}
@@ -209,11 +209,7 @@ function Runner({ model }) {
                 Shown below the result area once a logged-in user has a detection. */}
             {canReport && (
                 <div className="mt-6">
-                    <button
-                        type="button"
-                        onClick={openReport}
-                        className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition hover:border-blue-400 hover:text-blue-600"
-                    >
+                    <button type="button" onClick={openReport} className="btn btn-secondary">
                         <Flag className="h-4 w-4" />
                         Report this issue
                     </button>
@@ -231,12 +227,12 @@ function Runner({ model }) {
             {/* Legend of classes (generated from labels, not hardcoded) */}
             {labels.length > 0 && (
                 <div className="mt-6">
-                    <h2 className="text-sm font-semibold text-gray-500">Detects</h2>
+                    <h2 className="text-sm font-semibold text-muted">Detects</h2>
                     <div className="mt-3 flex flex-wrap gap-3">
                         {labels.map((label, i) => (
                             <span
                                 key={label}
-                                className="inline-flex items-center gap-2 rounded-md bg-white px-2.5 py-1 text-xs font-medium text-gray-700 shadow-sm ring-1 ring-gray-100"
+                                className="inline-flex items-center gap-2 rounded-md bg-surface px-2.5 py-1 text-xs font-medium text-ink shadow-soft ring-1 ring-line"
                             >
                                 <span
                                     className="h-3 w-3 rounded-sm"
@@ -341,15 +337,15 @@ function ImageRunner({ session, labels, numClasses, inputSize, onDetections, can
                     }}
                     className={`flex w-full flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-10 text-center transition ${
                         dragOver
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-300 bg-white hover:border-blue-400 hover:bg-gray-50"
+                            ? "border-primary bg-primary-soft"
+                            : "border-line-strong bg-surface hover:border-brand-300 hover:bg-surface-2"
                     }`}
                 >
-                    <Upload className="h-8 w-8 text-blue-600" />
-                    <span className="text-base font-semibold text-gray-900">
+                    <Upload className="h-8 w-8 text-accent" />
+                    <span className="text-base font-semibold text-ink">
                         Drop an image here, or click to choose
                     </span>
-                    <span className="text-sm text-gray-500">PNG or JPG</span>
+                    <span className="text-sm text-muted">PNG or JPG</span>
                 </button>
                 <input
                     ref={fileInputRef}
@@ -359,7 +355,7 @@ function ImageRunner({ session, labels, numClasses, inputSize, onDetections, can
                     onChange={(e) => handleFile(e.target.files?.[0])}
                 />
                 {fileError && (
-                    <p className="mt-2 text-sm font-medium text-red-600">{fileError}</p>
+                    <p className="mt-2 text-sm font-medium text-danger">{fileError}</p>
                 )}
             </div>
 
@@ -390,15 +386,15 @@ function ImageRunner({ session, labels, numClasses, inputSize, onDetections, can
 function ResultStatus({ runState, detections }) {
     if (runState === "running") {
         return (
-            <div className="flex items-center gap-3 rounded-lg border border-blue-100 bg-blue-50 p-4 text-blue-700">
+            <div className="flex items-center gap-3 rounded-lg border border-brand-200 bg-primary-soft p-4 text-accent-strong">
                 <Loader2 className="h-5 w-5 animate-spin" />
-                <span className="text-sm font-medium">Running detection…</span>
+                <span className="text-sm font-medium">Running detection...</span>
             </div>
         );
     }
     if (runState === "error") {
         return (
-            <div className="rounded-lg border border-red-100 bg-red-50 p-4 text-sm font-medium text-red-700">
+            <div className="rounded-lg border border-danger-soft bg-danger-soft p-4 text-sm font-medium text-danger">
                 Something went wrong running the model on this image.
             </div>
         );
@@ -406,13 +402,13 @@ function ResultStatus({ runState, detections }) {
     if (runState === "done" && detections) {
         if (detections.length === 0) {
             return (
-                <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm font-medium text-gray-600">
+                <div className="rounded-lg border border-line bg-surface p-4 text-sm font-medium text-muted">
                     No objects detected — try a clearer or closer image.
                 </div>
             );
         }
         return (
-            <div className="rounded-lg border border-green-100 bg-green-50 p-4 text-sm font-semibold text-green-700">
+            <div className="rounded-lg border border-success-soft bg-success-soft p-4 text-sm font-semibold text-success">
                 Found {detections.length}{" "}
                 {detections.length === 1 ? "detection" : "detections"}
             </div>
@@ -425,7 +421,7 @@ function ResultStatus({ runState, detections }) {
 
 function InputTabs({ tab, setTab }) {
     return (
-        <div className="mt-8 flex flex-wrap gap-2 border-b border-gray-200">
+        <div className="mt-8 flex flex-wrap gap-2 border-b border-line">
             <TabButton
                 icon={ImageIcon}
                 label="Image"
@@ -453,12 +449,12 @@ function TabButton({ icon: Icon, label, active, comingSoon, onClick }) {
     if (comingSoon) {
         return (
             <span
-                className="-mb-px inline-flex cursor-not-allowed items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-400"
+                className="-mb-px inline-flex cursor-not-allowed items-center gap-2 px-4 py-2.5 text-sm font-medium text-faint"
                 title="Coming soon"
             >
                 <Icon className="h-4 w-4" />
                 {label}
-                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-500">
+                <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted">
                     Soon
                 </span>
             </span>
@@ -471,8 +467,8 @@ function TabButton({ icon: Icon, label, active, comingSoon, onClick }) {
             onClick={onClick}
             className={`-mb-px inline-flex items-center gap-2 px-4 py-2.5 text-sm transition ${
                 active
-                    ? "border-b-2 border-blue-600 font-semibold text-blue-600"
-                    : "font-medium text-gray-500 hover:text-blue-600"
+                    ? "border-b-2 border-primary font-semibold text-accent"
+                    : "font-medium text-muted hover:text-accent"
             }`}
         >
             <Icon className="h-4 w-4" />
@@ -486,10 +482,10 @@ function TabButton({ icon: Icon, label, active, comingSoon, onClick }) {
 function MetaLoadingState() {
     return (
         <div className="animate-pulse">
-            <div className="h-8 w-2/3 rounded bg-gray-200" />
-            <div className="mt-4 h-5 w-full rounded bg-gray-100" />
-            <div className="mt-8 h-10 w-1/2 rounded bg-gray-100" />
-            <div className="mt-6 h-40 w-full rounded-xl bg-gray-100" />
+            <div className="h-8 w-2/3 rounded bg-surface-2" />
+            <div className="mt-4 h-5 w-full rounded bg-surface-2" />
+            <div className="mt-8 h-10 w-1/2 rounded bg-surface-2" />
+            <div className="mt-6 h-40 w-full rounded-xl bg-surface-2" />
         </div>
     );
 }
@@ -497,12 +493,9 @@ function MetaLoadingState() {
 function SimpleState({ title, body }) {
     return (
         <div className="mx-auto max-w-md text-center">
-            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-            <p className="mt-2 text-sm text-gray-600">{body}</p>
-            <Link
-                to="/discover"
-                className="mt-6 inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            <h2 className="text-lg font-semibold text-ink">{title}</h2>
+            <p className="mt-2 text-sm text-muted">{body}</p>
+            <Link to="/discover" className="btn btn-primary mt-6">
                 Browse all models
             </Link>
         </div>

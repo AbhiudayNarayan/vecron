@@ -4,6 +4,7 @@ import { axiosClient } from "../../utils/axiosClient";
 import ParticleBackground from '../../components/ParticleBackground';
 import WaveBackground from "../../components/WaveBackground";
 import FloatingIconsBackground from "../../components/FloatingIconsBackground";
+import BrandMark from "../../components/BrandMark";
 
 /**
  * RegisterPage
@@ -39,11 +40,11 @@ export default function RegisterPage() {
     const strength = getStrength(password);
     const strengthLabels = ["Too weak", "Weak", "Fair", "Good", "Strong"];
     const strengthColors = [
-        "bg-gray-200",
-        "bg-red-500",
-        "bg-orange-500",
-        "bg-yellow-500",
-        "bg-emerald-500",
+        "bg-surface-2",
+        "bg-danger",
+        "bg-warning",
+        "bg-primary",
+        "bg-success",
     ];
 
     // ---- Validation ------------------------------------------------------------
@@ -83,35 +84,29 @@ export default function RegisterPage() {
 
     // TODO: wire OAuth (Google + GitHub) — buttons disabled until then
 
-    const inputBase =
-        "w-full rounded-lg border px-4 py-2.5 text-gray-900 placeholder-gray-400 shadow-sm transition focus:outline-none focus:ring-2";
     const inputState = (field) =>
-        errors[field]
-            ? "border-red-400 focus:border-red-500 focus:ring-red-500"
-            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500";
+        errors[field] ? "border-danger focus:border-danger" : "";
 
     return (
-        <div className="relative overflow-hidden flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+        <div className="relative flex flex-1 items-center justify-center overflow-hidden bg-canvas px-4 py-12">
             <ParticleBackground/>
-            
+
             <WaveBackground />
-            <div className="relative z-10 w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
-                {/* Brand wordmark — change the text/logo here */}
+            <div className="card relative z-10 w-full max-w-md p-8">
+                {/* Brand wordmark */}
                 <div className="mb-6 text-center">
                     <Link
                         to="/"
-                        className="inline-flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900"
+                        className="inline-flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-ink"
                     >
-                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-extrabold text-white">
-                            V
-                        </span>
-                        <span>Something</span>
+                        <BrandMark className="h-8 w-8" />
+                        <span>Kriya</span>
                     </Link>
                 </div>
 
                 <div className="mb-6 text-center">
-                    <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
-                    <p className="mt-1 text-sm text-gray-500">
+                    <h1 className="text-2xl font-bold text-ink">Create your account</h1>
+                    <p className="mt-1 text-sm text-muted">
                         Start finding the right AI model in seconds.
                     </p>
                 </div>
@@ -122,7 +117,7 @@ export default function RegisterPage() {
                         type="button"
                         disabled
                         title="Coming soon"
-                        className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 opacity-60 shadow-sm"
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-md border border-line-strong bg-surface px-4 py-2.5 text-sm font-medium text-ink opacity-60 shadow-soft"
                     >
                         <GoogleIcon />
                         Sign up with Google
@@ -131,7 +126,7 @@ export default function RegisterPage() {
                         type="button"
                         disabled
                         title="Coming soon"
-                        className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 opacity-60 shadow-sm"
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-md border border-line-strong bg-surface px-4 py-2.5 text-sm font-medium text-ink opacity-60 shadow-soft"
                     >
                         <GitHubIcon />
                         Sign up with GitHub
@@ -140,18 +135,18 @@ export default function RegisterPage() {
 
                 {/* Divider */}
                 <div className="my-6 flex items-center gap-3">
-                    <div className="h-px flex-1 bg-gray-200" />
-                    <span className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                    <div className="h-px flex-1 bg-line" />
+                    <span className="text-xs font-medium uppercase tracking-wide text-faint">
                         or
                     </span>
-                    <div className="h-px flex-1 bg-gray-200" />
+                    <div className="h-px flex-1 bg-line" />
                 </div>
 
                 {/* Email/password form */}
                 <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                     {/* Full Name */}
                     <div>
-                        <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-gray-700">
+                        <label htmlFor="name" className="label">
                             Full Name
                         </label>
                         <input
@@ -161,16 +156,16 @@ export default function RegisterPage() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Jane Doe"
-                            className={`${inputBase} ${inputState("name")}`}
+                            className={`input ${inputState("name")}`}
                         />
                         {errors.name && (
-                            <p className="mt-1.5 text-sm font-medium text-red-600">{errors.name}</p>
+                            <p className="mt-1.5 text-sm font-medium text-danger">{errors.name}</p>
                         )}
                     </div>
 
                     {/* Email */}
                     <div>
-                        <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-gray-700">
+                        <label htmlFor="email" className="label">
                             Email Address
                         </label>
                         <input
@@ -180,16 +175,16 @@ export default function RegisterPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="you@example.com"
-                            className={`${inputBase} ${inputState("email")}`}
+                            className={`input ${inputState("email")}`}
                         />
                         {errors.email && (
-                            <p className="mt-1.5 text-sm font-medium text-red-600">{errors.email}</p>
+                            <p className="mt-1.5 text-sm font-medium text-danger">{errors.email}</p>
                         )}
                     </div>
 
                     {/* Password + show/hide + strength */}
                     <div>
-                        <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-gray-700">
+                        <label htmlFor="password" className="label">
                             Password
                         </label>
                         <div className="relative">
@@ -200,13 +195,13 @@ export default function RegisterPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="••••••••"
-                                className={`${inputBase} ${inputState("password")} pr-11`}
+                                className={`input pr-11 ${inputState("password")}`}
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword((v) => !v)}
                                 aria-label={showPassword ? "Hide password" : "Show password"}
-                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition hover:text-gray-600"
+                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-faint transition hover:text-ink"
                             >
                                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
                             </button>
@@ -219,30 +214,27 @@ export default function RegisterPage() {
                                     {[0, 1, 2, 3].map((i) => (
                                         <div
                                             key={i}
-                                            className={`h-1.5 flex-1 rounded-full transition-colors ${i < strength ? strengthColors[strength] : "bg-gray-200"
+                                            className={`h-1.5 flex-1 rounded-full transition-colors ${i < strength ? strengthColors[strength] : "bg-surface-2"
                                                 }`}
                                         />
                                     ))}
                                 </div>
-                                <p className="mt-1 text-xs text-gray-500">
+                                <p className="mt-1 text-xs text-muted">
                                     Password strength:{" "}
-                                    <span className="font-medium text-gray-700">
+                                    <span className="font-medium text-ink">
                                         {strengthLabels[strength]}
                                     </span>
                                 </p>
                             </div>
                         )}
                         {errors.password && (
-                            <p className="mt-1.5 text-sm font-medium text-red-600">{errors.password}</p>
+                            <p className="mt-1.5 text-sm font-medium text-danger">{errors.password}</p>
                         )}
                     </div>
 
                     {/* Confirm Password + show/hide */}
                     <div>
-                        <label
-                            htmlFor="confirmPassword"
-                            className="mb-1.5 block text-sm font-medium text-gray-700"
-                        >
+                        <label htmlFor="confirmPassword" className="label">
                             Confirm Password
                         </label>
                         <div className="relative">
@@ -253,19 +245,19 @@ export default function RegisterPage() {
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="••••••••"
-                                className={`${inputBase} ${inputState("confirmPassword")} pr-11`}
+                                className={`input pr-11 ${inputState("confirmPassword")}`}
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowConfirm((v) => !v)}
                                 aria-label={showConfirm ? "Hide password" : "Show password"}
-                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition hover:text-gray-600"
+                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-faint transition hover:text-ink"
                             >
                                 {showConfirm ? <EyeOffIcon /> : <EyeIcon />}
                             </button>
                         </div>
                         {errors.confirmPassword && (
-                            <p className="mt-1.5 text-sm font-medium text-red-600">
+                            <p className="mt-1.5 text-sm font-medium text-danger">
                                 {errors.confirmPassword}
                             </p>
                         )}
@@ -273,25 +265,25 @@ export default function RegisterPage() {
 
                     {/* Terms */}
                     <div>
-                        <label className="flex items-start gap-2.5 text-sm text-gray-600">
+                        <label className="flex items-start gap-2.5 text-sm text-muted">
                             <input
                                 type="checkbox"
                                 checked={agreedToTerms}
                                 onChange={(e) => setAgreedToTerms(e.target.checked)}
-                                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                className="mt-0.5 h-4 w-4 rounded border-line-strong accent-[var(--c-primary)]"
                             />
                             <span>
                                 I agree to the Terms of Service and Privacy Policy.
                             </span>
                         </label>
                         {errors.terms && (
-                            <p className="mt-1.5 text-sm font-medium text-red-600">{errors.terms}</p>
+                            <p className="mt-1.5 text-sm font-medium text-danger">{errors.terms}</p>
                         )}
                     </div>
 
                     {/* Server feedback */}
                     {errors.server && (
-                        <p className="rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700">
+                        <p className="rounded-lg bg-danger-soft px-4 py-2.5 text-sm font-medium text-danger">
                             {errors.server}
                         </p>
                     )}
@@ -300,12 +292,12 @@ export default function RegisterPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-blue-400"
+                        className="btn btn-primary btn-block"
                     >
                         {loading ? (
                             <>
                                 <Spinner />
-                                Creating account…
+                                Creating account...
                             </>
                         ) : (
                             "Create Account"
@@ -314,9 +306,9 @@ export default function RegisterPage() {
                 </form>
 
                 {/* Footer link */}
-                <p className="mt-6 text-center text-sm text-gray-600">
+                <p className="mt-6 text-center text-sm text-muted">
                     Already have an account?{" "}
-                    <Link to="/login" className="font-medium text-blue-600 hover:text-blue-700 hover:underline">
+                    <Link to="/login" className="font-semibold text-accent hover:text-accent-strong hover:underline">
                         Log In
                     </Link>
                 </p>
@@ -346,7 +338,7 @@ function EyeOffIcon() {
 
 function Spinner() {
     return (
-        <svg className="mr-2 h-4 w-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+        <svg className="mr-2 h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
         </svg>

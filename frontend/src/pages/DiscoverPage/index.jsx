@@ -57,14 +57,14 @@ export default function DiscoverPage() {
     };
 
     return (
-        <main className="min-h-screen bg-gray-50 text-gray-900">
-            <div className="mx-auto max-w-6xl px-6 py-12">
+        <main className="flex-1 bg-canvas text-ink">
+            <div className="container-page py-12 md:py-16">
                 {/* ── Header ──────────────────────────────────────────────── */}
                 <div className="text-center">
                     <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
                         Browse models
                     </h1>
-                    <p className="mt-3 text-gray-600">
+                    <p className="mt-3 text-muted">
                         Find a production-ready ML model for your task — no account needed.
                     </p>
                 </div>
@@ -72,17 +72,17 @@ export default function DiscoverPage() {
                 {/* ── Search bar ──────────────────────────────────────────── */}
                 <form onSubmit={handleSearch} className="mx-auto mt-8 max-w-xl">
                     <div className="relative">
-                        <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                        <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-faint" />
                         <input
                             type="text"
                             value={term}
                             onChange={(e) => setTerm(e.target.value)}
-                            placeholder="Search by name, task, or industry…"
-                            className="w-full rounded-lg border border-gray-300 bg-white py-3 pl-12 pr-28 text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Search by name, task, or industry..."
+                            className="input py-3 pl-12 pr-28 shadow-soft"
                         />
                         <button
                             type="submit"
-                            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="btn btn-primary btn-sm absolute right-2 top-1/2 -translate-y-1/2"
                         >
                             Search
                         </button>
@@ -114,18 +114,15 @@ function LoadingState() {
     return (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                    key={i}
-                    className="animate-pulse rounded-xl border border-gray-100 bg-white p-6 shadow-md"
-                >
-                    <div className="h-5 w-2/3 rounded bg-gray-200" />
-                    <div className="mt-3 h-4 w-full rounded bg-gray-100" />
-                    <div className="mt-2 h-4 w-5/6 rounded bg-gray-100" />
+                <div key={i} className="card card-pad animate-pulse">
+                    <div className="h-5 w-2/3 rounded bg-surface-2" />
+                    <div className="mt-3 h-4 w-full rounded bg-surface-2" />
+                    <div className="mt-2 h-4 w-5/6 rounded bg-surface-2" />
                     <div className="mt-4 flex gap-2">
-                        <div className="h-6 w-20 rounded-md bg-gray-100" />
-                        <div className="h-6 w-20 rounded-md bg-gray-100" />
+                        <div className="h-6 w-20 rounded-md bg-surface-2" />
+                        <div className="h-6 w-20 rounded-md bg-surface-2" />
                     </div>
-                    <div className="mt-4 h-4 w-1/3 rounded bg-gray-100" />
+                    <div className="mt-4 h-4 w-1/3 rounded bg-surface-2" />
                 </div>
             ))}
         </div>
@@ -135,12 +132,12 @@ function LoadingState() {
 function EmptyState({ q }) {
     return (
         <div className="mx-auto max-w-md text-center">
-            <h2 className="text-lg font-semibold text-gray-900">
-                {q ? `No models found for “${q}”` : "No models available yet"}
+            <h2 className="text-lg font-semibold text-ink">
+                {q ? `No models found for "${q}"` : "No models available yet"}
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-muted">
                 {q
-                    ? "Try a broader term — for example a task like “detection” or an industry like “agriculture”."
+                    ? 'Try a broader term — for example a task like "detection" or an industry like "agriculture".'
                     : "Check back soon — new models are added regularly."}
             </p>
         </div>
@@ -150,10 +147,10 @@ function EmptyState({ q }) {
 function ErrorState() {
     return (
         <div className="mx-auto max-w-md text-center">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-ink">
                 Something went wrong
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-muted">
                 We couldn&apos;t load the models. Please try again.
             </p>
         </div>

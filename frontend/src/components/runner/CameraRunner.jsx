@@ -197,9 +197,9 @@ export default function CameraRunner({ ready, runDetection, labels, numClasses, 
 
             {/* Permission prompt */}
             {phase === "idle" && (
-                <div className="rounded-xl border border-gray-200 bg-white p-6 text-center">
-                    <Camera className="mx-auto h-10 w-10 text-indigo-500" />
-                    <p className="mt-4 text-sm leading-relaxed text-gray-600">
+                <div className="card card-pad text-center">
+                    <Camera className="mx-auto h-10 w-10 text-accent" />
+                    <p className="mt-4 text-sm leading-relaxed text-muted">
                         We need camera access to run live detection. Nothing is recorded
                         or sent anywhere — everything runs on your device.
                     </p>
@@ -207,19 +207,19 @@ export default function CameraRunner({ ready, runDetection, labels, numClasses, 
                         type="button"
                         onClick={startCamera}
                         disabled={!ready}
-                        className="mt-5 inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="btn btn-primary btn-lg mt-5"
                     >
                         <Camera className="h-4 w-4" />
-                        {ready ? "Start camera" : "Loading model…"}
+                        {ready ? "Start camera" : "Loading model..."}
                     </button>
                 </div>
             )}
 
             {/* Requesting spinner */}
             {phase === "requesting" && (
-                <div className="flex items-center justify-center gap-3 rounded-xl border border-indigo-100 bg-indigo-50 p-6 text-indigo-700">
+                <div className="flex items-center justify-center gap-3 rounded-xl border border-brand-200 bg-primary-soft p-6 text-accent-strong">
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    <span className="text-sm font-medium">Requesting camera access…</span>
+                    <span className="text-sm font-medium">Requesting camera access...</span>
                 </div>
             )}
 
@@ -247,21 +247,21 @@ export default function CameraRunner({ ready, runDetection, labels, numClasses, 
             {/* Live view */}
             {phase === "live" && (
                 <div>
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-green-100 bg-green-50 px-4 py-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-success-soft bg-success-soft px-4 py-3">
                         <div className="flex items-center gap-2">
                             <span className="relative flex h-2.5 w-2.5">
-                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
+                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-60" />
+                                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
                             </span>
-                            <span className="text-sm font-semibold text-green-800">Live</span>
+                            <span className="text-sm font-semibold text-success">Live</span>
                         </div>
-                        <span className="inline-flex items-center gap-2 rounded-lg border border-green-200 bg-white px-3 py-1 text-sm font-semibold text-green-700">
+                        <span className="inline-flex items-center gap-2 rounded-lg border border-success-soft bg-surface px-3 py-1 text-sm font-semibold text-success">
                             {liveCount} {liveCount === 1 ? "detection" : "detections"}
                         </span>
                         <button
                             type="button"
                             onClick={handleStop}
-                            className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                            className="inline-flex items-center gap-2 rounded-lg border border-danger-soft bg-surface px-4 py-2.5 text-sm font-semibold text-danger transition hover:bg-danger-soft"
                         >
                             <CameraOff className="h-4 w-4" />
                             Stop camera
@@ -270,7 +270,7 @@ export default function CameraRunner({ ready, runDetection, labels, numClasses, 
                     <div className="mt-4">
                         <canvas
                             ref={canvasRef}
-                            className="h-auto w-full rounded-lg border border-gray-200 bg-gray-100"
+                            className="h-auto w-full rounded-lg border border-line bg-surface-2"
                         />
                     </div>
                 </div>
@@ -282,13 +282,13 @@ export default function CameraRunner({ ready, runDetection, labels, numClasses, 
 function ErrorState({ message, onRetry, hint }) {
     const [hintOpen, setHintOpen] = useState(false);
     return (
-        <div className="rounded-xl border border-red-100 bg-red-50 p-6 text-center">
-            <CameraOff className="mx-auto h-8 w-8 text-red-500" />
-            <p className="mt-3 text-sm font-medium text-red-700">{message}</p>
+        <div className="rounded-xl border border-danger-soft bg-danger-soft p-6 text-center">
+            <CameraOff className="mx-auto h-8 w-8 text-danger" />
+            <p className="mt-3 text-sm font-medium text-danger">{message}</p>
             <button
                 type="button"
                 onClick={onRetry}
-                className="mt-4 inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                className="mt-4 inline-flex items-center gap-2 rounded-lg border border-danger-soft bg-surface px-4 py-2.5 text-sm font-semibold text-danger transition hover:bg-danger-soft"
             >
                 Try again
             </button>
@@ -297,12 +297,12 @@ function ErrorState({ message, onRetry, hint }) {
                     <button
                         type="button"
                         onClick={() => setHintOpen((o) => !o)}
-                        className="text-xs font-medium text-red-500 underline-offset-2 hover:underline focus:outline-none"
+                        className="text-xs font-medium text-danger underline-offset-2 hover:underline focus:outline-none"
                     >
                         {hintOpen ? "Hide help ▲" : "How do I enable camera access? ▼"}
                     </button>
                     {hintOpen && (
-                        <p className="mt-2 text-xs leading-relaxed text-red-600">
+                        <p className="mt-2 text-xs leading-relaxed text-danger">
                             {hint}
                         </p>
                     )}

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Search, Boxes, Download, Gift, ArrowRight, ShieldCheck } from "lucide-react";
-import hero from "../../assets/hero.png";
+import HeroVisual from "../../components/HeroVisual";
 
 /**
  * HomePage — Kriya landing page.
@@ -10,53 +10,52 @@ import hero from "../../assets/hero.png";
  */
 export default function HomePage() {
     return (
-        <main className="bg-white text-gray-900">
-            {/* ── Hero ─────────────────────────────────────────────────────── */}
-            <section className="relative overflow-hidden bg-zinc-900 text-white">
-                <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-2 md:py-28">
+        <div className="bg-canvas text-ink">
+            {/* Hero */}
+            <section className="relative overflow-hidden">
+                <div
+                    className="pointer-events-none absolute inset-0 -z-10"
+                    style={{
+                        background:
+                            "radial-gradient(60rem 40rem at 80% -10%, var(--brand-100), transparent 60%), radial-gradient(50rem 40rem at 0% 10%, var(--brand-50), transparent 55%)",
+                    }}
+                />
+                <div className="container-page grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
                     <div>
-                        <span className="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-800/60 px-3 py-1 text-xs font-medium text-zinc-300">
+                        <span className="badge badge-brand">
                             <ShieldCheck className="h-3.5 w-3.5" />
                             Specialised ML models, ready to run
                         </span>
                         <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">
                             The marketplace for{" "}
-                            <span className="text-blue-500">specialised ML models</span>
+                            <span className="text-accent">specialised ML models</span>
                         </h1>
-                        <p className="mt-5 max-w-md text-lg text-zinc-400">
+                        <p className="mt-5 max-w-md text-lg text-muted">
                             Discover production-ready computer-vision models, download the
                             ONNX, and ship. The free tier works without an account.
                         </p>
-                        <div className="mt-8 flex flex-wrap gap-4">
-                            <Link
-                                to="/discover"
-                                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-                            >
+                        <div className="mt-8 flex flex-wrap gap-3">
+                            <Link to="/discover" className="btn btn-primary btn-lg">
                                 Browse models
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
-                            <Link
-                                to="/register"
-                                className="inline-flex items-center gap-2 rounded-lg border border-zinc-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800"
-                            >
+                            <Link to="/register" className="btn btn-secondary btn-lg">
                                 Create free account
                             </Link>
                         </div>
                     </div>
 
-                    <div className="hidden md:block">
-                        <img
-                            src={hero}
-                            alt="Kriya — ML model marketplace"
-                            className="mx-auto w-full max-w-md rounded-xl shadow-2xl ring-1 ring-white/10"
-                        />
+                    {/* Right-side hero visual — animated ML detection preview.
+                        Shows on mobile too (stacks below the text via the grid). */}
+                    <div className="mt-4 md:mt-0">
+                        <HeroVisual />
                     </div>
                 </div>
             </section>
 
-            {/* ── Value props ──────────────────────────────────────────────── */}
-            <section className="mx-auto max-w-6xl px-6 py-20">
-                <div className="grid gap-8 md:grid-cols-3">
+            {/* Value props */}
+            <section className="container-page py-16 md:py-20">
+                <div className="grid gap-6 md:grid-cols-3">
                     <Feature
                         icon={<Search className="h-6 w-6" />}
                         title="Find by task & industry"
@@ -75,9 +74,9 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ── How it works ─────────────────────────────────────────────── */}
-            <section className="bg-gray-50 py-20">
-                <div className="mx-auto max-w-6xl px-6">
+            {/* How it works */}
+            <section className="bg-surface-2 py-16 md:py-20">
+                <div className="container-page">
                     <h2 className="text-center text-3xl font-bold">How it works</h2>
                     <div className="mt-12 grid gap-8 md:grid-cols-3">
                         <Step n="1" title="Browse" body="Explore the catalog and search for the model that fits your task." />
@@ -87,35 +86,42 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ── Final CTA ────────────────────────────────────────────────── */}
-            <section className="bg-zinc-900 text-white">
-                <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-6 py-16 text-center">
-                    <Boxes className="h-10 w-10 text-blue-500" />
-                    <h2 className="text-3xl font-bold">Start finding the right model</h2>
-                    <p className="max-w-md text-zinc-400">
-                        Jump straight into the catalog — no account required to start.
-                    </p>
-                    <Link
-                        to="/discover"
-                        className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+            {/* Final CTA */}
+            <section className="container-page py-16 md:py-20">
+                <div className="card overflow-hidden">
+                    <div
+                        className="flex flex-col items-center gap-5 px-6 py-14 text-center"
+                        style={{
+                            background:
+                                "radial-gradient(40rem 24rem at 50% -20%, var(--brand-100), transparent 70%)",
+                        }}
                     >
-                        Browse models
-                        <ArrowRight className="h-4 w-4" />
-                    </Link>
+                        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-on-primary shadow-soft">
+                            <Boxes className="h-7 w-7" />
+                        </span>
+                        <h2 className="text-3xl font-bold">Start finding the right model</h2>
+                        <p className="max-w-md text-muted">
+                            Jump straight into the catalog — no account required to start.
+                        </p>
+                        <Link to="/discover" className="btn btn-primary btn-lg">
+                            Browse models
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    </div>
                 </div>
             </section>
-        </main>
+        </div>
     );
 }
 
 function Feature({ icon, title, body }) {
     return (
-        <div className="rounded-xl border border-gray-100 p-6 shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+        <div className="card card-pad card-hover">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft text-accent">
                 {icon}
             </div>
             <h3 className="mt-4 text-lg font-semibold">{title}</h3>
-            <p className="mt-2 text-sm text-gray-500">{body}</p>
+            <p className="mt-2 text-sm text-muted">{body}</p>
         </div>
     );
 }
@@ -123,11 +129,11 @@ function Feature({ icon, title, body }) {
 function Step({ n, title, body }) {
     return (
         <div className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-pill bg-primary text-lg font-bold text-on-primary shadow-soft">
                 {n}
             </div>
             <h3 className="mt-4 text-lg font-semibold">{title}</h3>
-            <p className="mt-2 text-sm text-gray-500">{body}</p>
+            <p className="mt-2 text-sm text-muted">{body}</p>
         </div>
     );
 }

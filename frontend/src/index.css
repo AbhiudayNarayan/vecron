@@ -1,5 +1,379 @@
 @import "tailwindcss";
 
+/* =============================================================================
+   KRIYA DESIGN SYSTEM — single source of truth
+   -----------------------------------------------------------------------------
+   All design tokens live in :root as CSS custom properties. Components and
+   pages must reference these (via the Tailwind theme utilities below, the
+   .btn/.card/.input/.badge component classes, or var(--token) directly) and
+   must NOT hardcode hex colors.
+
+   DARK-READY (not dark): to add a dark theme later, define a `.dark` (or
+   [data-theme="dark"]) block that overrides the SEMANTIC --c-* tokens only.
+   Nothing else needs to change. Do NOT add dark values now.
+
+   Naming:
+     --brand-*  raw saffron/amber palette (the one accent color)
+     --stone-*  raw warm-neutral palette
+     --c-*      SEMANTIC color tokens (what dark mode would override)
+     --r-*      radius scale         --sh-*  shadow scale
+     --ff-*     font family          --space-* spacing scale
+   ========================================================================== */
+
+:root {
+  /* ---- Brand: warm saffron / honey-amber (the single accent) -------------- */
+  --brand-50:  #fef9ef;
+  --brand-100: #fdefd2;
+  --brand-200: #fadfa8;
+  --brand-300: #f4bd71; /* signature honey-saffron — primary FILL (dark text) */
+  --brand-400: #eba24a; /* fill hover                                          */
+  --brand-500: #e08a2a; /* vivid saffron — strong accents / active            */
+  --brand-600: #c47015; /* readable accent text / icons on light surfaces     */
+  --brand-700: #9e5912;
+  --brand-800: #7e4711;
+  --brand-900: #693b10; /* dark text on a honey fill                          */
+
+  /* ---- Warm neutrals ------------------------------------------------------ */
+  --stone-50:  #faf9f7;
+  --stone-100: #f4f1ec;
+  --stone-200: #e7e2d9;
+  --stone-300: #d4ccbe;
+  --stone-400: #a8a093;
+  --stone-500: #797163;
+  --stone-600: #57514a;
+  --stone-700: #423d38;
+  --stone-800: #2b2722;
+  --stone-900: #1c1916;
+
+  /* ---- Status palettes (soft + ink pairs) --------------------------------- */
+  --green-soft: #e7f3e3;  --green-ink: #2f7a34;
+  --amber-soft: #fdf0d2;  --amber-ink: #9a6a08;
+  --sky-soft:   #e2eefb;  --sky-ink:   #1d6fb8;
+  --red-soft:   #fbe6e3;  --red-ink:   #c0392b;
+
+  /* ===========================================================================
+     SEMANTIC TOKENS  (dark mode overrides THESE)
+     ========================================================================= */
+
+  /* Surfaces & lines */
+  --c-canvas:      #fcfaf6; /* page background — warm off-white               */
+  --c-surface:     #ffffff; /* cards, navbar, inputs                          */
+  --c-surface-2:   var(--stone-100); /* subtle filled areas / muted sections  */
+  --c-surface-invert: var(--stone-900); /* dark sections on a light page      */
+  --c-line:        var(--stone-200); /* borders, dividers                     */
+  --c-line-strong: var(--stone-300);
+
+  /* Text */
+  --c-ink:    var(--stone-800); /* primary text     */
+  --c-muted:  var(--stone-500); /* secondary text   */
+  --c-faint:  var(--stone-400); /* tertiary / hints */
+  --c-on-dark: #f4f1ec;         /* text on dark/inverted surfaces */
+
+  /* Brand / primary action.
+     The honey fill (--c-primary) is light, so it pairs with DARK text
+     (--c-on-primary). For saffron TEXT/ICONS on a light surface, use the
+     readable --c-accent instead (the fill color is too light to read as text). */
+  --c-primary:        var(--brand-300); /* honey fill — buttons, active bg     */
+  --c-primary-strong: var(--brand-400); /* fill hover                          */
+  --c-on-primary:     var(--brand-900); /* dark text/icon on the honey fill    */
+  --c-accent:         var(--brand-600); /* readable accent text/icon on light  */
+  --c-accent-strong:  var(--brand-700); /* accent text hover                   */
+  --c-primary-vivid:  var(--brand-500); /* strong highlight where wanted       */
+  --c-primary-soft:   var(--brand-50);  /* soft badge / icon-chip backgrounds  */
+  --c-primary-soft-ink: var(--brand-700);
+  --c-ring:           var(--brand-300); /* focus ring                          */
+
+  /* Status (semantic aliases) */
+  --c-success: var(--green-ink); --c-success-soft: var(--green-soft);
+  --c-warning: var(--amber-ink); --c-warning-soft: var(--amber-soft);
+  --c-info:    var(--sky-ink);   --c-info-soft:    var(--sky-soft);
+  --c-danger:  var(--red-ink);   --c-danger-soft:  var(--red-soft);
+
+  /* ---- Radius scale (rounded, soft, friendly) ----------------------------- */
+  --r-sm:    0.5rem;
+  --r-md:    0.75rem;
+  --r-lg:    1rem;
+  --r-xl:    1.5rem;
+  --r-2xl:   2rem;
+  --r-pill:  9999px;
+
+  /* ---- Shadows (soft, warm-tinted depth) ---------------------------------- */
+  --sh-xs: 0 1px 2px rgba(40, 28, 12, 0.06);
+  --sh-sm: 0 1px 3px rgba(40, 28, 12, 0.08), 0 1px 2px rgba(40, 28, 12, 0.05);
+  --sh-md: 0 6px 16px rgba(40, 28, 12, 0.08), 0 2px 6px rgba(40, 28, 12, 0.05);
+  --sh-lg: 0 14px 34px rgba(40, 28, 12, 0.12), 0 4px 10px rgba(40, 28, 12, 0.06);
+  --sh-focus: 0 0 0 3px rgba(235, 162, 74, 0.45);
+
+  /* ---- Spacing scale ------------------------------------------------------ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
+
+  /* ---- Typography --------------------------------------------------------- */
+  --ff-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+}
+
+/* =============================================================================
+   TAILWIND THEME BRIDGE
+   Maps the tokens above to Tailwind utility names so the whole app can use
+   bg-primary, text-ink, border-line, rounded-card, shadow-soft, font-sans, etc.
+   `@theme inline` keeps utilities pointing at the var() refs above, so dark
+   mode just needs to override the --c-* values.
+   ========================================================================== */
+@theme inline {
+  /* raw brand scale -> bg-brand-500, text-brand-700 ... */
+  --color-brand-50:  var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+
+  /* semantic surfaces / text */
+  --color-canvas:        var(--c-canvas);
+  --color-surface:       var(--c-surface);
+  --color-surface-2:     var(--c-surface-2);
+  --color-surface-invert: var(--c-surface-invert);
+  --color-line:          var(--c-line);
+  --color-line-strong:   var(--c-line-strong);
+  --color-ink:           var(--c-ink);
+  --color-muted:         var(--c-muted);
+  --color-faint:         var(--c-faint);
+  --color-on-dark:       var(--c-on-dark);
+
+  /* semantic brand / primary */
+  --color-primary:        var(--c-primary);
+  --color-primary-strong: var(--c-primary-strong);
+  --color-primary-vivid:  var(--c-primary-vivid);
+  --color-primary-soft:   var(--c-primary-soft);
+  --color-primary-soft-ink: var(--c-primary-soft-ink);
+  --color-on-primary:     var(--c-on-primary);
+  --color-accent:         var(--c-accent);
+  --color-accent-strong:  var(--c-accent-strong);
+
+  /* status */
+  --color-success:      var(--c-success);
+  --color-success-soft: var(--c-success-soft);
+  --color-warning:      var(--c-warning);
+  --color-warning-soft: var(--c-warning-soft);
+  --color-info:         var(--c-info);
+  --color-info-soft:    var(--c-info-soft);
+  --color-danger:       var(--c-danger);
+  --color-danger-soft:  var(--c-danger-soft);
+
+  /* radius -> rounded-sm/md/lg/xl/2xl/pill + semantic aliases */
+  --radius-sm:   var(--r-sm);
+  --radius-md:   var(--r-md);
+  --radius-lg:   var(--r-lg);
+  --radius-xl:   var(--r-xl);
+  --radius-2xl:  var(--r-2xl);
+  --radius-pill: var(--r-pill);
+  --radius-card:  var(--r-xl);
+  --radius-btn:   var(--r-md);
+  --radius-input: var(--r-md);
+
+  /* shadow -> shadow-xs/soft/card/float */
+  --shadow-xs:    var(--sh-xs);
+  --shadow-soft:  var(--sh-sm);
+  --shadow-card:  var(--sh-md);
+  --shadow-float: var(--sh-lg);
+
+  /* font -> font-sans */
+  --font-sans: var(--ff-sans);
+}
+
+/* =============================================================================
+   BASE
+   ========================================================================== */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-    @apply bg-zinc-900 text-white;
+  margin: 0;
+  background-color: var(--c-canvas);
+  color: var(--c-ink);
+  font-family: var(--ff-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--sh-focus);
+  border-radius: var(--r-sm);
+}
+
+/* =============================================================================
+   REUSABLE COMPONENT CLASSES
+   One Button, one Card, one Input, one Badge — used everywhere for consistency.
+   ========================================================================== */
+@layer components {
+  /* ---- Buttons ---------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-family: var(--ff-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    border-radius: var(--r-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease,
+      border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background-color: var(--c-primary);
+    color: var(--c-on-primary);
+    box-shadow: var(--sh-sm);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--c-primary-strong);
+  }
+
+  .btn-secondary {
+    background-color: var(--c-surface);
+    color: var(--c-ink);
+    border-color: var(--c-line-strong);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--c-surface-2);
+    border-color: var(--c-accent);
+    color: var(--c-accent-strong);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--c-ink);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background-color: var(--c-surface-2);
+  }
+
+  .btn-danger {
+    background-color: var(--c-danger);
+    color: #ffffff;
+    box-shadow: var(--sh-sm);
+  }
+  .btn-danger:hover:not(:disabled) {
+    filter: brightness(0.92);
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+  .btn-lg {
+    padding: 0.8125rem 1.625rem;
+    font-size: 1rem;
+  }
+  .btn-block {
+    width: 100%;
+  }
+
+  /* ---- Card ------------------------------------------------------------- */
+  .card {
+    background-color: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-sm);
+  }
+  .card-pad {
+    padding: 1.5rem;
+  }
+  .card-hover {
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sh-lg);
+    border-color: var(--brand-200);
+  }
+
+  /* ---- Inputs ----------------------------------------------------------- */
+  .input,
+  .textarea,
+  .select {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-family: var(--ff-sans);
+    font-size: 0.9375rem;
+    color: var(--c-ink);
+    background-color: var(--c-surface);
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--r-md);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .input::placeholder,
+  .textarea::placeholder {
+    color: var(--c-faint);
+  }
+  .input:focus,
+  .textarea:focus,
+  .select:focus {
+    outline: none;
+    border-color: var(--c-primary);
+    box-shadow: var(--sh-focus);
+  }
+  .textarea {
+    resize: vertical;
+    min-height: 6rem;
+  }
+  .label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--c-ink);
+  }
+
+  /* ---- Badge ------------------------------------------------------------ */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    border-radius: var(--r-pill);
+    background-color: var(--c-surface-2);
+    color: var(--c-muted);
+  }
+  .badge-brand   { background-color: var(--c-primary-soft); color: var(--c-primary-soft-ink); }
+  .badge-success { background-color: var(--c-success-soft); color: var(--c-success); }
+  .badge-warning { background-color: var(--c-warning-soft); color: var(--c-warning); }
+  .badge-info    { background-color: var(--c-info-soft);    color: var(--c-info); }
+  .badge-danger  { background-color: var(--c-danger-soft);  color: var(--c-danger); }
+
+  /* ---- Layout helper ---------------------------------------------------- */
+  .container-page {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
 }

@@ -31,8 +31,9 @@ const App = () => {
   }, [])
 
   return (
-    <div>
-      <Navbar /> {/* <h1>Header</h1> */}
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
+      <main className="flex flex-1 flex-col">
       <Routes>
         <Route path='/' Component={HomePage} />
         <Route path='/discover' Component={DiscoverPage} />
@@ -44,7 +45,8 @@ const App = () => {
         <Route path='/dashboard' element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
-      <Footer />{/* <h1>Footer</h1> */}
+      </main>
+      <Footer />
     </div>
   )
 }

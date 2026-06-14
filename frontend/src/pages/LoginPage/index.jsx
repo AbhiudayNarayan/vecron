@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import ParticleBackground from "../../components/ParticleBackground";
+import BrandMark from "../../components/BrandMark";
 import { useAuth } from "../../context/MainContext";
 
 /**
@@ -71,51 +72,41 @@ export default function LoginPage() {
   // TODO: wire OAuth (Google + GitHub) — buttons disabled until then
 
   // ── Shared styles ──────────────────────────────────────────────────────────
-  const inputBase =
-    "w-full rounded-lg border px-4 py-2.5 text-gray-900 placeholder-gray-400 shadow-sm transition focus:outline-none focus:ring-2";
   const inputState = (field) =>
-    errors[field]
-      ? "border-red-400 focus:border-red-500 focus:ring-red-500"
-      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500";
+    errors[field] ? "border-danger focus:border-danger" : "";
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="relative overflow-hidden flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="relative flex flex-1 items-center justify-center overflow-hidden bg-canvas px-4 py-12">
         <ParticleBackground/>
-      {/*
-        Drop your background component here, same as RegisterPage:
-        <FloatingIconsBackground />   or   <WaveBackground />
-      */}
 
-      <div className="relative z-10 w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
+      <div className="card relative z-10 w-full max-w-md p-8">
         {/* Brand wordmark */}
         <div className="mb-6 text-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900"
+            className="inline-flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-ink"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-extrabold text-white">
-              V
-            </span>
-            <span>VECRON</span>
+            <BrandMark className="h-8 w-8" />
+            <span>Kriya</span>
           </Link>
         </div>
 
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-ink">Welcome back</h1>
+          <p className="mt-1 text-sm text-muted">
             Sign in to your account to continue.
           </p>
         </div>
 
         {/* Registered success banner */}
         {registeredBanner && (
-          <div className="mb-6 flex items-center justify-between rounded-lg bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700">
+          <div className="mb-6 flex items-center justify-between rounded-lg bg-success-soft px-4 py-2.5 text-sm font-medium text-success">
             Account created — please sign in.
             <button
               type="button"
               onClick={() => setRegisteredBanner(false)}
-              className="ml-4 text-emerald-500 hover:text-emerald-700"
+              className="ml-4 text-success hover:opacity-70"
               aria-label="Dismiss"
             >
               ×
@@ -129,7 +120,7 @@ export default function LoginPage() {
             type="button"
             disabled
             title="Coming soon"
-            className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 opacity-60 shadow-sm"
+            className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-md border border-line-strong bg-surface px-4 py-2.5 text-sm font-medium text-ink opacity-60 shadow-soft"
           >
             <GoogleIcon />
             Continue with Google
@@ -138,7 +129,7 @@ export default function LoginPage() {
             type="button"
             disabled
             title="Coming soon"
-            className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 opacity-60 shadow-sm"
+            className="flex w-full cursor-not-allowed items-center justify-center gap-3 rounded-md border border-line-strong bg-surface px-4 py-2.5 text-sm font-medium text-ink opacity-60 shadow-soft"
           >
             <GitHubIcon />
             Continue with GitHub
@@ -147,9 +138,9 @@ export default function LoginPage() {
 
         {/* Divider */}
         <div className="my-6 flex items-center gap-3">
-          <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-xs font-medium uppercase tracking-wide text-gray-400">or</span>
-          <div className="h-px flex-1 bg-gray-200" />
+          <div className="h-px flex-1 bg-line" />
+          <span className="text-xs font-medium uppercase tracking-wide text-faint">or</span>
+          <div className="h-px flex-1 bg-line" />
         </div>
 
         {/* Form */}
@@ -157,14 +148,14 @@ export default function LoginPage() {
 
           {/* Server-level error (wrong credentials, server down, etc.) */}
           {errors.server && (
-            <div className="rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600">
+            <div className="rounded-lg bg-danger-soft px-4 py-2.5 text-sm font-medium text-danger">
               {errors.server}
             </div>
           )}
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="label">
               Email Address
             </label>
             <input
@@ -174,20 +165,20 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className={`${inputBase} ${inputState("email")}`}
+              className={`input ${inputState("email")}`}
             />
             {errors.email && (
-              <p className="mt-1.5 text-sm font-medium text-red-600">{errors.email}</p>
+              <p className="mt-1.5 text-sm font-medium text-danger">{errors.email}</p>
             )}
           </div>
 
           {/* Password + show/hide */}
           <div>
             <div className="mb-1.5 flex items-center justify-between">
-              <label htmlFor="password" className="text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="text-sm font-semibold text-ink">
                 Password
               </label>
-              <span className="cursor-default text-xs text-gray-400">
+              <span className="cursor-default text-xs text-faint">
                 Forgot password? (coming soon)
               </span>
             </div>
@@ -199,29 +190,29 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className={`${inputBase} ${inputState("password")} pr-11`}
+                className={`input pr-11 ${inputState("password")}`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition hover:text-gray-600"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-faint transition hover:text-ink"
               >
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
             </div>
             {errors.password && (
-              <p className="mt-1.5 text-sm font-medium text-red-600">{errors.password}</p>
+              <p className="mt-1.5 text-sm font-medium text-danger">{errors.password}</p>
             )}
           </div>
 
           {/* Remember me */}
-          <label className="flex items-center gap-2.5 text-sm text-gray-600">
+          <label className="flex items-center gap-2.5 text-sm text-muted">
             <input
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-line-strong accent-[var(--c-primary)]"
             />
             Keep me signed in
           </label>
@@ -230,16 +221,16 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-blue-400"
+            className="btn btn-primary btn-block"
           >
-            {loading ? <><Spinner />Signing in…</> : "Sign In"}
+            {loading ? <><Spinner />Signing in...</> : "Sign In"}
           </button>
         </form>
 
         {/* Footer link */}
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-muted">
           Don&apos;t have an account?{" "}
-          <Link to="/register" className="font-medium text-blue-600 hover:text-blue-700 hover:underline">
+          <Link to="/register" className="font-semibold text-accent hover:text-accent-strong hover:underline">
             Create one
           </Link>
         </p>

@@ -5,7 +5,8 @@
       "Bash(pnpm install *)",
       "Bash(pnpm config *)",
       "Bash(Remove-Item -Recurse -Force node_modules)",
-      "Bash(npx eslint *)"
+      "Bash(npx eslint *)",
+      "Bash(npx vite *)"
     ]
   }
 }

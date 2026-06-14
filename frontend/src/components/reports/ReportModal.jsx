@@ -175,14 +175,14 @@ export default function ReportModal({ modelId, modelName, isOpen, onClose, annot
             onClick={resetAndClose}
         >
             <div
-                className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
+                className="relative w-full max-w-lg rounded-2xl bg-surface p-6 shadow-float"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Close */}
                 <button
                     type="button"
                     onClick={resetAndClose}
-                    className="absolute right-4 top-4 rounded-md p-1 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+                    className="absolute right-4 top-4 rounded-md p-1 text-faint transition hover:bg-surface-2 hover:text-ink"
                     aria-label="Close"
                 >
                     <X className="h-5 w-5" />
@@ -190,14 +190,14 @@ export default function ReportModal({ modelId, modelName, isOpen, onClose, annot
 
                 {done ? (
                     <div className="flex flex-col items-center gap-3 py-8 text-center">
-                        <CheckCircle2 className="h-12 w-12 text-green-600" />
-                        <p className="text-lg font-semibold text-gray-900">
+                        <CheckCircle2 className="h-12 w-12 text-success" />
+                        <p className="text-lg font-semibold text-ink">
                             Report submitted — thank you!
                         </p>
                     </div>
                 ) : (
                     <>
-                        <h2 className="text-xl font-bold tracking-tight text-gray-900">
+                        <h2 className="text-xl font-bold tracking-tight text-ink">
                             Report this issue
                         </h2>
                         <Stepper step={step} />
@@ -243,7 +243,7 @@ export default function ReportModal({ modelId, modelName, isOpen, onClose, annot
                         )}
 
                         {submitError && step !== 3 && (
-                            <p className="mt-3 text-sm font-medium text-red-600">{submitError}</p>
+                            <p className="mt-3 text-sm font-medium text-danger">{submitError}</p>
                         )}
                     </>
                 )}
@@ -267,22 +267,22 @@ function Stepper({ step }) {
                         <span
                             className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${
                                 active
-                                    ? "bg-blue-600 text-white"
+                                    ? "bg-primary text-on-primary"
                                     : complete
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-gray-100 text-gray-500"
+                                    ? "bg-success-soft text-success"
+                                    : "bg-surface-2 text-muted"
                             }`}
                         >
                             {n}
                         </span>
                         <span
                             className={`text-xs font-medium ${
-                                active ? "text-gray-900" : "text-gray-400"
+                                active ? "text-ink" : "text-faint"
                             }`}
                         >
                             {label}
                         </span>
-                        {i < labels.length - 1 && <span className="h-px w-4 bg-gray-200" />}
+                        {i < labels.length - 1 && <span className="h-px w-4 bg-line" />}
                     </div>
                 );
             })}
@@ -305,32 +305,32 @@ function StepDetails({
     return (
         <div className="mt-5 space-y-4">
             <div>
-                <label className="block text-sm font-medium text-gray-700">
-                    Title <span className="text-red-500">*</span>
+                <label className="label">
+                    Title <span className="text-danger">*</span>
                 </label>
                 <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Large pothole near the bus stop"
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="input"
                 />
             </div>
 
             <div>
-                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <label className="label">Description</label>
                 <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
                     placeholder="Add any detail that helps someone find or fix it (optional)"
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="textarea"
                 />
             </div>
 
             <div>
-                <label className="block text-sm font-medium text-gray-700">Category</label>
-                <span className="mt-1 inline-flex items-center gap-1.5 rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-600">
+                <label className="label">Category</label>
+                <span className="badge badge-brand">
                     <Tag className="h-3 w-3" />
                     {modelName}
                 </span>
@@ -339,18 +339,18 @@ function StepDetails({
             <button
                 type="button"
                 onClick={() => setIsPublic((v) => !v)}
-                className="flex w-full items-center justify-between rounded-lg border border-gray-200 px-3 py-2.5 text-left text-sm transition hover:border-gray-300"
+                className="flex w-full items-center justify-between rounded-lg border border-line px-3 py-2.5 text-left text-sm transition hover:border-line-strong"
             >
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-ink">
                     {isPublic ? "Public — anyone can see this report" : "Private"}
                 </span>
                 <span
                     className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
-                        isPublic ? "bg-blue-600" : "bg-gray-300"
+                        isPublic ? "bg-primary" : "bg-line-strong"
                     }`}
                 >
                     <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                        className={`inline-block h-4 w-4 transform rounded-full bg-surface transition ${
                             isPublic ? "translate-x-4" : "translate-x-0.5"
                         }`}
                     />
@@ -361,7 +361,7 @@ function StepDetails({
                 type="button"
                 disabled={!title.trim()}
                 onClick={onContinue}
-                className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="btn btn-primary btn-block"
             >
                 Continue
             </button>
@@ -395,7 +395,7 @@ function StepLocation({
                 type="button"
                 onClick={useMyLocation}
                 disabled={locating}
-                className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-3.5 py-2 text-sm font-semibold text-gray-700 transition hover:border-blue-400 hover:text-blue-600 disabled:opacity-60"
+                className="btn btn-secondary btn-sm"
             >
                 {locating ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -406,14 +406,14 @@ function StepLocation({
             </button>
 
             {hasCoords && (
-                <p className="rounded-lg bg-gray-50 px-3 py-2 text-sm font-medium text-gray-700">
+                <p className="rounded-lg bg-surface-2 px-3 py-2 text-sm font-medium text-ink">
                     {formatCoord(latitude, "N", "S")}, {formatCoord(longitude, "E", "W")}
                 </p>
             )}
-            {geoError && <p className="text-sm font-medium text-red-600">{geoError}</p>}
+            {geoError && <p className="text-sm font-medium text-danger">{geoError}</p>}
 
             <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="label">
                     Address / landmark (optional)
                 </label>
                 <input
@@ -421,22 +421,18 @@ function StepLocation({
                     value={locationText}
                     onChange={(e) => setLocationText(e.target.value)}
                     placeholder="e.g. Opposite City Mall, MG Road"
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="input"
                 />
             </div>
 
             <div className="flex gap-2">
-                <button
-                    type="button"
-                    onClick={onBack}
-                    className="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
-                >
+                <button type="button" onClick={onBack} className="btn btn-secondary">
                     Back
                 </button>
                 <button
                     type="button"
                     onClick={onContinue}
-                    className="flex-1 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+                    className="btn btn-primary flex-1"
                 >
                     Continue
                 </button>
@@ -459,12 +455,12 @@ function StepPhotos({
 }) {
     return (
         <div className="mt-5 space-y-4">
-            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-6 text-center transition hover:border-blue-400 hover:bg-gray-50">
-                <ImagePlus className="h-7 w-7 text-blue-600" />
-                <span className="text-sm font-semibold text-gray-900">
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-line-strong p-6 text-center transition hover:border-brand-300 hover:bg-surface-2">
+                <ImagePlus className="h-7 w-7 text-accent" />
+                <span className="text-sm font-semibold text-ink">
                     Add photos (up to {MAX_IMAGES})
                 </span>
-                <span className="text-xs text-gray-500">JPG, PNG or WebP</span>
+                <span className="text-xs text-muted">JPG, PNG or WebP</span>
                 <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -483,7 +479,7 @@ function StepPhotos({
                     {images.map((img, idx) => (
                         <li
                             key={img.previewUrl}
-                            className="flex items-center gap-3 rounded-lg border border-gray-200 p-2"
+                            className="flex items-center gap-3 rounded-lg border border-line p-2"
                         >
                             <div className="relative h-14 w-14 shrink-0">
                                 <img
@@ -492,14 +488,14 @@ function StepPhotos({
                                     className="h-14 w-14 rounded-md object-cover"
                                 />
                                 {img.is_annotated && (
-                                    <span className="absolute -left-1 -top-1 inline-flex items-center gap-0.5 rounded-full bg-indigo-600 px-1.5 py-0.5 text-[9px] font-semibold text-white shadow">
+                                    <span className="absolute -left-1 -top-1 inline-flex items-center gap-0.5 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold text-on-primary shadow">
                                         <Sparkles className="h-2.5 w-2.5" />
                                         Detected
                                     </span>
                                 )}
                             </div>
                             <div className="min-w-0 flex-1">
-                                <div className="inline-flex rounded-md border border-gray-200 p-0.5 text-xs font-medium">
+                                <div className="inline-flex rounded-md border border-line p-0.5 text-xs font-medium">
                                     {["before", "after"].map((t) => (
                                         <button
                                             key={t}
@@ -508,8 +504,8 @@ function StepPhotos({
                                             onClick={() => setImageType(idx, t)}
                                             className={`rounded px-2.5 py-1 capitalize transition ${
                                                 img.type === t
-                                                    ? "bg-blue-600 text-white"
-                                                    : "text-gray-600 hover:bg-gray-100"
+                                                    ? "bg-primary text-on-primary"
+                                                    : "text-muted hover:bg-surface-2"
                                             }`}
                                         >
                                             {t}
@@ -524,7 +520,7 @@ function StepPhotos({
                                     type="button"
                                     disabled={submitting}
                                     onClick={() => removeImage(idx)}
-                                    className="rounded-md p-1.5 text-gray-400 transition hover:bg-gray-50 hover:text-red-600"
+                                    className="rounded-md p-1.5 text-faint transition hover:bg-surface-2 hover:text-danger"
                                     aria-label="Remove photo"
                                 >
                                     <Trash2 className="h-4 w-4" />
@@ -535,14 +531,14 @@ function StepPhotos({
                 </ul>
             )}
 
-            {submitError && <p className="text-sm font-medium text-red-600">{submitError}</p>}
+            {submitError && <p className="text-sm font-medium text-danger">{submitError}</p>}
 
             <div className="flex gap-2">
                 <button
                     type="button"
                     onClick={onBack}
                     disabled={submitting}
-                    className="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-60"
+                    className="btn btn-secondary"
                 >
                     Back
                 </button>
@@ -550,10 +546,10 @@ function StepPhotos({
                     type="button"
                     onClick={onSubmit}
                     disabled={submitting}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="btn btn-primary flex-1"
                 >
                     {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-                    {submitting ? "Submitting…" : "Submit report"}
+                    {submitting ? "Submitting..." : "Submit report"}
                 </button>
             </div>
         </div>

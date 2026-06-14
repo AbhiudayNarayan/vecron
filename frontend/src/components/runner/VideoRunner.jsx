@@ -506,15 +506,15 @@ export default function VideoRunner({ ready, runDetection, modelId, labels, numC
                         }}
                         className={`flex w-full flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-10 text-center transition ${
                             dragOver
-                                ? "border-blue-500 bg-blue-50"
-                                : "border-gray-300 bg-white hover:border-blue-400 hover:bg-gray-50"
+                                ? "border-primary bg-primary-soft"
+                                : "border-line-strong bg-surface hover:border-brand-300 hover:bg-surface-2"
                         }`}
                     >
-                        <Upload className="h-8 w-8 text-blue-600" />
-                        <span className="text-base font-semibold text-gray-900">
+                        <Upload className="h-8 w-8 text-accent" />
+                        <span className="text-base font-semibold text-ink">
                             Drop a video here, or click to choose
                         </span>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-muted">
                             Processing starts automatically — MP4 or WebM
                         </span>
                     </button>
@@ -526,12 +526,12 @@ export default function VideoRunner({ ready, runDetection, modelId, labels, numC
                         onChange={(e) => handleFile(e.target.files?.[0])}
                     />
                     {fileError && (
-                        <p className="mt-2 text-sm font-medium text-red-600">{fileError}</p>
+                        <p className="mt-2 text-sm font-medium text-danger">{fileError}</p>
                     )}
                     {queuedFile && !ready && (
-                        <div className="mt-3 flex items-center gap-2 text-sm font-medium text-indigo-600">
+                        <div className="mt-3 flex items-center gap-2 text-sm font-medium text-accent">
                             <Loader2 className="h-4 w-4 animate-spin" />
-                            Loading model… processing "{queuedFile.name}" will start automatically.
+                            Loading model... processing "{queuedFile.name}" will start automatically.
                         </div>
                     )}
                 </div>
@@ -540,23 +540,23 @@ export default function VideoRunner({ ready, runDetection, modelId, labels, numC
             {/* Processing view — live canvas + clear progress + detection counter. */}
             {processing && (
                 <div className="mt-6">
-                    <div className="rounded-xl border border-indigo-100 bg-indigo-50/60 p-4">
+                    <div className="rounded-xl border border-brand-200 bg-primary-soft p-4">
                         <div className="flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-2 text-sm font-semibold text-indigo-800">
+                            <div className="flex items-center gap-2 text-sm font-semibold text-accent-strong">
                                 <Sparkles className="h-4 w-4 animate-pulse" />
-                                Processing… {percent}%
+                                Processing... {percent}%
                             </div>
-                            <span className="inline-flex items-center gap-2 rounded-lg border border-green-100 bg-white px-3 py-1 text-sm font-semibold text-green-700">
+                            <span className="inline-flex items-center gap-2 rounded-lg border border-success-soft bg-surface px-3 py-1 text-sm font-semibold text-success">
                                 {liveCount} {liveCount === 1 ? "detection" : "detections"}
                             </span>
                         </div>
-                        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-indigo-100">
+                        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-brand-100">
                             <div
-                                className="h-full rounded-full bg-indigo-600 transition-[width] duration-150"
+                                className="h-full rounded-full bg-primary transition-[width] duration-150"
                                 style={{ width: `${percent}%` }}
                             />
                         </div>
-                        <p className="mt-2 truncate text-xs text-indigo-700/80" title={processingLabel}>
+                        <p className="mt-2 truncate text-xs text-accent" title={processingLabel}>
                             {processingLabel}
                         </p>
                     </div>
@@ -564,7 +564,7 @@ export default function VideoRunner({ ready, runDetection, modelId, labels, numC
                     <div className="mt-4">
                         <canvas
                             ref={canvasRef}
-                            className="h-auto w-full rounded-lg border border-gray-200 bg-gray-100"
+                            className="h-auto w-full rounded-lg border border-line bg-surface-2"
                         />
                     </div>
                 </div>
@@ -575,13 +575,13 @@ export default function VideoRunner({ ready, runDetection, modelId, labels, numC
             {results.length > 0 && (
                 <div className="mt-8">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-sm font-semibold text-gray-500">
+                        <h2 className="text-sm font-semibold text-muted">
                             Results ({results.length})
                         </h2>
                         <button
                             type="button"
                             onClick={() => videoResultsStore.clear()}
-                            className="text-xs font-medium text-gray-400 transition hover:text-red-600"
+                            className="text-xs font-medium text-faint transition hover:text-danger"
                         >
                             Clear all
                         </button>

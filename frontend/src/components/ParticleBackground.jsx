@@ -17,9 +17,10 @@ const ParticleBackground = () => {
       background: { color: { value: "transparent" } },
       fpsLimit: 60,
       particles: {
-        color: { value: "#0400fd" },
+        // Saffron brand tones (mirror --brand-500 / --brand-300 from index.css).
+        color: { value: "#e08a2a" },
         links: {
-          color: "#60a5fa",   // blue-400, not gray — gray-400 @ 0.3 over white = invisible
+          color: "#f4bd71",   // honey-saffron web, visible over the warm light bg
           distance: 150,
           enable: true,
           opacity: 0.45,      // was 0.3 → bumped so the web is actually visible

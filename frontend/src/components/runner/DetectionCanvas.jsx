@@ -96,7 +96,7 @@ const DetectionCanvas = forwardRef(function DetectionCanvas(
     return (
         <canvas
             ref={setRef}
-            className="h-auto w-full rounded-lg border border-gray-200 bg-gray-100"
+            className="h-auto w-full rounded-lg border border-line bg-surface-2"
         />
     );
 });

@@ -1,45 +1,86 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import BrandMark from './BrandMark'
+
+// Lucide removed brand glyphs, so the social marks are inline SVGs (currentColor).
+function LinkedinIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
+    </svg>
+  )
+}
+
+function GithubIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.92 1.23 3.23 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z" />
+    </svg>
+  )
+}
 
 const Footer = () => {
   return (
-    <footer className="text-gray-600 body-font bg-white">
-      <div className="px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
-        <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-          </svg>
-          <span className="ml-3 text-xl">Kriya</span>
-        </a>
-        <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">© 2026 Kriya —
-          <a href="https://www.linkedin.com/in/abhiuday-narayan-a44153327/" className="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">@abhiuday</a>
-        </p>
-        <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
-          <a className="text-gray-500">
-            <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="w-5 h-5" viewBox="0 0 24 24">
-              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-            </svg>
+    <footer className="mt-auto border-t border-line bg-surface">
+      <div className="container-page flex flex-col items-center gap-6 py-10 sm:flex-row sm:justify-between">
+        {/* Brand + tagline */}
+        <div className="flex flex-col items-center gap-3 sm:items-start">
+          <Link to="/" className="flex items-center gap-2.5" aria-label="Kriya home">
+            <BrandMark className="h-9 w-9" />
+            <span className="text-xl font-extrabold tracking-tight text-ink">Kriya</span>
+          </Link>
+          <p className="max-w-xs text-center text-sm text-muted sm:text-left">
+            Run trusted ML models and report what matters — no expertise required.
+          </p>
+        </div>
+
+        {/* Quick links */}
+        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium text-muted">
+          <Link to="/discover" className="transition-colors hover:text-accent">Browse models</Link>
+          <Link to="/feed" className="transition-colors hover:text-accent">Public Feed</Link>
+          <Link to="/register" className="transition-colors hover:text-accent">Get started</Link>
+        </nav>
+
+        {/* Socials */}
+        <div className="flex items-center gap-2">
+          <a
+            href="https://www.linkedin.com/in/abhiuday-narayan-a44153327/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            className="flex h-9 w-9 items-center justify-center rounded-pill text-muted transition-colors hover:bg-surface-2 hover:text-accent"
+          >
+            <LinkedinIcon className="h-[18px] w-[18px]" />
           </a>
-          <a className="ml-3 text-gray-500">
-            <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="w-5 h-5" viewBox="0 0 24 24">
-              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
-            </svg>
+          <a
+            href="https://github.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="flex h-9 w-9 items-center justify-center rounded-pill text-muted transition-colors hover:bg-surface-2 hover:text-accent"
+          >
+            <GithubIcon className="h-[18px] w-[18px]" />
           </a>
-          <a className="ml-3 text-gray-500">
-            <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="w-5 h-5" viewBox="0 0 24 24">
-              <rect width={20} height={20} x={2} y={2} rx={5} ry={5} />
-              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01" />
-            </svg>
-          </a>
-          <a className="ml-3 text-gray-500">
-            <svg fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={0} className="w-5 h-5" viewBox="0 0 24 24">
-              <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
-              <circle cx={4} cy={4} r={2} stroke="none" />
-            </svg>
-          </a>
-        </span>
+        </div>
+      </div>
+
+      <div className="border-t border-line">
+        <div className="container-page flex flex-col items-center justify-between gap-2 py-4 text-xs text-faint sm:flex-row">
+          <p>© 2026 Kriya. All rights reserved.</p>
+          <p>
+            Built by{' '}
+            <a
+              href="https://www.linkedin.com/in/abhiuday-narayan-a44153327/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-accent hover:text-accent-strong"
+            >
+              @abhiuday
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
-
   )
 }
 
