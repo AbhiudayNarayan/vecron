@@ -23,6 +23,7 @@ SEED_NAME = "Fire & Smoke Detection"
 GARBAGE_NAME = "Garbage Classification"
 POT_HOLE_NAME = "Pothole Detection"
 GARBAGE_DETECTION_NAME = "Garbage Detection"
+GEOTRAX_NAME = "GeoTrax Traffic Detection"
 
 # Descriptive columns kept in sync on every run (id and name are never touched;
 # onnx_url is only updated when --force is passed — see upsert()).
@@ -97,6 +98,24 @@ SEED_MODELS = [
         "labels": '["overflow", "garbage_bin", "garbage"]',
         "license": "unknown",
         "is_free": True,
+        "cloud_eligible": False,
+    },
+    {
+        "name": GEOTRAX_NAME,
+        "description": (
+            "Detects cars, buses, trucks, motorcycles, pedestrians, and bicycles "
+            "in road and traffic images and video. Useful for traffic monitoring "
+            "and transport analysis."
+        ),
+        "task_type": "detection",
+        "industry": "transportation",
+        "accuracy": 0.711,  # supplied mAP@50-95
+        "onnx_url": f"{BASE_URL}/static/models/geotrax_hbb_yolov8s_1920_v1.onnx",
+        "input_size": 1920,
+        "labels": '["Car", "Bus", "Truck", "Motorcycle", "Pedestrian", "Bicycle"]',
+        "license": "unknown",  # source package did not include license information
+        "is_free": True,
+        # Keep browser-only until the model's license is confirmed.
         "cloud_eligible": False,
     },
 ]
