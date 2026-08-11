@@ -42,3 +42,4 @@ app.include_router(PublicRoute)
 app.include_router(AuthRoute)
 app.include_router(ModelRoute)
 app.include_router(ReportRoute)
+# CI/CD test - deploy pipeline check

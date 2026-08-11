@@ -29,6 +29,8 @@ ENV/
 .env
 .env.*
 !.env.example
+# Production seeding credentials — must NEVER be committed (already matched by .env.*)
+backend/.env.seed.production
 
 # ========================
 # Node / Frontend

@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "PowerShell(git *)",
-      "PowerShell(npm run *)"
+      "PowerShell(npm run *)",
+      "Bash(git ls-tree *)",
+      "Bash(pnpm build *)",
+      "Bash(git push *)"
     ]
   }
 }

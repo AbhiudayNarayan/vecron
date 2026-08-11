@@ -49,7 +49,12 @@
       "Bash('/c/Program Files/Google/Chrome/Application/chrome.exe' --headless=new --disable-gpu --hide-scrollbars --window-size=1280,1400 --virtual-time-budget=8000 '--screenshot=D:\\\\myStart\\\\monorepo\\\\feed_check.png' http://localhost:5173/feed)",
       "Bash(echo \"exit:$?\")",
       "PowerShell(Get-NetTCPConnection *)",
-      "PowerShell(Get-Process *)"
+      "PowerShell(Get-Process *)",
+      "Bash(railway variables *)",
+      "Bash(sed -E 's/\\(PASSWORD[^ ]*|MYSQL_ROOT_PASSWORD\\)\\([^|]*\\)/\\\\1=***MASKED***/I')",
+      "Bash(git check-ignore *)",
+      "Bash(python -m json.tool)",
+      "Bash(git -C .. status --short)"
     ]
   }
 }
