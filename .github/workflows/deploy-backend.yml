@@ -1,0 +1,44 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Tag current working commit (rollback point)
+        run: |
+          cd /home/abhi/Quantize/vecron/backend
+          git tag last-good-deploy -f
+          git push origin last-good-deploy -f
+        continue-on-error: true
+
+      - name: Pull latest code on Orion
+        run: |
+          cd /home/abhi/Quantize/vecron/backend
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Install dependencies
+        run: |
+          cd /home/abhi/Quantize/vecron/backend
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Restart backend service
+        run: sudo systemctl restart vecron-backend
+
+      - name: Health check with rollback
+        run: |
+          sleep 4
+          if ! curl -f http://localhost:8000/docs; then
+            echo "Deploy failed health check — rolling back"
+            cd /home/abhi/Quantize/vecron/backend
+            git reset --hard last-good-deploy
+            sudo systemctl restart vecron-backend
+            exit 1
+          fi
