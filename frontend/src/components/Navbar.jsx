@@ -17,8 +17,8 @@ const Navbar = () => {
 
     const links = [
         { to: '/', label: 'Home', end: true },
-        { to: '/discover', label: 'Browse' },
-        { to: '/feed', label: 'Public Feed' },
+        { to: '/catalog', label: 'AI Catalog' },
+        { to: '/workflows', label: 'Workflows' },
         ...(isLoggedIn ? [{ to: '/dashboard', label: 'Dashboard' }] : []),
     ];
 
@@ -38,10 +38,10 @@ const Navbar = () => {
                     to="/"
                     onClick={() => setOpen(false)}
                     className="flex items-center gap-2.5"
-                    aria-label="Kriya home"
+                    aria-label="Edgenix home"
                 >
                     <BrandMark className="h-9 w-9" />
-                    <span className="text-xl font-extrabold tracking-tight text-ink">Kriya</span>
+                    <span className="text-xl font-extrabold tracking-tight text-ink">Edgenix</span>
                 </Link>
 
                 {/* Desktop nav */}

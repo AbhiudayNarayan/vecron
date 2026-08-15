@@ -25,19 +25,19 @@ const Footer = () => {
       <div className="container-page flex flex-col items-center gap-6 py-10 sm:flex-row sm:justify-between">
         {/* Brand + tagline */}
         <div className="flex flex-col items-center gap-3 sm:items-start">
-          <Link to="/" className="flex items-center gap-2.5" aria-label="Kriya home">
+          <Link to="/" className="flex items-center gap-2.5" aria-label="Edgenix home">
             <BrandMark className="h-9 w-9" />
-            <span className="text-xl font-extrabold tracking-tight text-ink">Kriya</span>
+            <span className="text-xl font-extrabold tracking-tight text-ink">Edgenix</span>
           </Link>
           <p className="max-w-xs text-center text-sm text-muted sm:text-left">
-            Run trusted ML models and report what matters — no expertise required.
+            Find the right AI capability. Run it where you need it.
           </p>
         </div>
 
         {/* Quick links */}
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium text-muted">
-          <Link to="/discover" className="transition-colors hover:text-accent">Browse models</Link>
-          <Link to="/feed" className="transition-colors hover:text-accent">Public Feed</Link>
+          <Link to="/catalog" className="transition-colors hover:text-accent">AI Catalog</Link>
+          <Link to="/workflows" className="transition-colors hover:text-accent">Workflows</Link>
           <Link to="/register" className="transition-colors hover:text-accent">Get started</Link>
         </nav>
 
@@ -66,7 +66,7 @@ const Footer = () => {
 
       <div className="border-t border-line">
         <div className="container-page flex flex-col items-center justify-between gap-2 py-4 text-xs text-faint sm:flex-row">
-          <p>© 2026 Kriya. All rights reserved.</p>
+          <p>© 2026 Edgenix. All rights reserved.</p>
           <p>
             Built by{' '}
             <a

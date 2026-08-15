@@ -1,10 +1,10 @@
-# Kriya — Project State & Context Handoff
+# Edgenix — Project State & Context Handoff
 
 ## What it is
-Marketplace where non-technical users find and run specialised ML detection
-models in-browser (free ONNX inference) with a planned paid cloud-GPU tier.
+Platform where non-technical users find and run specialised AI capabilities in
+the browser (free local execution) with a planned paid cloud-GPU tier.
 Thesis: narrow single-task models beat general LLMs for continuous tasks.
-(Working name "Kriya" — formerly VisionMarket.)
+(Product name: Edgenix.)
 
 ## Stack
 - Backend: FastAPI (async), async SQLAlchemy, MySQL (db: vecron), JWT auth

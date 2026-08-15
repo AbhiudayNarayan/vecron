@@ -120,10 +120,10 @@ export default function DashboardPage() {
                     </h2>
                     <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         <ActionCard
-                            to="/discover"
+                            to="/catalog"
                             icon={<Search className="h-5 w-5" />}
-                            title="Browse models"
-                            body="Find a model for your next task."
+                            title="AI Catalog"
+                            body="Find the right capability for your next task."
                         />
                         <ActionCard
                             to="/feed"
@@ -132,7 +132,7 @@ export default function DashboardPage() {
                             body="See what the community is reporting."
                         />
                         <ActionCard
-                            to="/discover"
+                            to="/catalog"
                             icon={<Sparkles className="h-5 w-5" />}
                             title="Run a detection"
                             body="Spot an issue, then report it in a tap."
@@ -150,7 +150,7 @@ export default function DashboardPage() {
                             {recentModels.map((m) => (
                                 <Link
                                     key={m.category}
-                                    to={m.modelId ? `/model/${m.modelId}` : "/discover"}
+                                    to={m.modelId ? `/catalog/${m.modelId}` : "/catalog"}
                                     className="card card-hover flex items-center gap-3 px-4 py-3"
                                 >
                                     <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-soft text-accent">
@@ -433,8 +433,8 @@ function EmptyState() {
                 No reports yet. Run a detection and use &quot;Report this issue&quot; to flag
                 something.
             </p>
-            <Link to="/discover" className="btn btn-primary mt-4">
-                Browse models
+            <Link to="/catalog" className="btn btn-primary mt-4">
+                Explore AI Catalog
             </Link>
         </div>
     );

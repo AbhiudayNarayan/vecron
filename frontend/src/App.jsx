@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage'
 import DiscoverPage from './pages/DiscoverPage'
 import ModelDetailPage from './pages/ModelDetailPage'
 import ModelRunnerPage from './pages/ModelRunnerPage'
+import WorkflowsPage from './pages/WorkflowsPage'
 import DashboardPage from './pages/DashboardPage'
 import PublicFeedPage from './pages/PublicFeedPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -36,8 +37,11 @@ const App = () => {
       <main className="flex flex-1 flex-col">
       <Routes>
         <Route path='/' Component={HomePage} />
+        <Route path='/catalog' Component={DiscoverPage} />
         <Route path='/discover' Component={DiscoverPage} />
+        <Route path='/workflows' Component={WorkflowsPage} />
         <Route path='/feed' Component={PublicFeedPage} />
+        <Route path='/catalog/:id' Component={ModelDetailPage} />
         <Route path='/model/:id' Component={ModelDetailPage} />
         <Route path='/model/:id/run' Component={ModelRunnerPage} />
         <Route path='/login' Component={LoginPage} />

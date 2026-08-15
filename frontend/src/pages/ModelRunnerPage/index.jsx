@@ -495,8 +495,8 @@ function SimpleState({ title, body }) {
         <div className="mx-auto max-w-md text-center">
             <h2 className="text-lg font-semibold text-ink">{title}</h2>
             <p className="mt-2 text-sm text-muted">{body}</p>
-            <Link to="/discover" className="btn btn-primary mt-6">
-                Browse all models
+            <Link to="/catalog" className="btn btn-primary mt-6">
+                Explore AI Catalog
             </Link>
         </div>
     );

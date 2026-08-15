@@ -88,7 +88,7 @@ export default function LoginPage() {
             className="inline-flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-ink"
           >
             <BrandMark className="h-8 w-8" />
-            <span>Kriya</span>
+            <span>Edgenix</span>
           </Link>
         </div>
 

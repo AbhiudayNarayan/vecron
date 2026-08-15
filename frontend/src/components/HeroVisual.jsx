@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
 /**
- * HeroVisual — dynamic, animated hero graphic for the Kriya landing page.
+ * HeroVisual — dynamic, animated hero graphic for the Edgenix landing page.
  *
- * Shows what Kriya does (ML object detection) as a polished, lightweight
+ * Shows how Edgenix turns a visual input into a useful result as a polished, lightweight
  * composition built with pure React + CSS:
  *   1. A central "detection preview" card with a placeholder scene and
  *      bounding boxes that draw in (clip-path + opacity) and loop subtly,
@@ -208,7 +208,7 @@ export default function HeroVisual({ imageSrc }) {
                                 </div>
                             )}
 
-                            {/* "Live detection" status chip */}
+                            {/* Live capability status chip */}
                             <div
                                 className="absolute left-2 top-2 flex items-center gap-1.5 rounded-pill px-2 py-0.5 text-[0.625rem] font-semibold"
                                 style={{
@@ -221,7 +221,7 @@ export default function HeroVisual({ imageSrc }) {
                                     className="kh-dot inline-block h-1.5 w-1.5 rounded-pill"
                                     style={{ background: "var(--brand-400)" }}
                                 />
-                                Live detection
+                                Live preview
                             </div>
 
                             {/* Animated bounding boxes */}
@@ -257,7 +257,7 @@ export default function HeroVisual({ imageSrc }) {
                         {/* Card footer — reinforces the product story */}
                         <div className="flex items-center justify-between px-3 py-2">
                             <span className="text-[0.6875rem] font-semibold text-ink">
-                                road-defects-v2.onnx
+                                Capability preview
                             </span>
                             <span className="badge badge-brand text-[0.625rem]">4 objects</span>
                         </div>

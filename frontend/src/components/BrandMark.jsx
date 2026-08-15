@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * BrandMark — Kriya's logo mark. A soft rounded saffron tile with a stylised
+ * BrandMark — Edgenix's logo mark. A soft rounded saffron tile with a stylised
  * "k" / spark glyph. Shared by Navbar and Footer so the brand is identical
  * everywhere. Colors come from the design tokens (honey fill + dark ink).
  */

@@ -186,8 +186,8 @@ function EmptyState() {
             <p className="text-sm text-muted">
                 No public reports yet. Be the first — run a detection and report an issue.
             </p>
-            <Link to="/discover" className="btn btn-primary mt-4">
-                Browse models
+            <Link to="/catalog" className="btn btn-primary mt-4">
+                Explore AI Catalog
             </Link>
         </div>
     );
