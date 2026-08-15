@@ -7,6 +7,7 @@ from .routes.AuthRoute import route as AuthRoute
 from .routes.ModelRoute import route as ModelRoute
 from .routes.ReportRoute import route as ReportRoute
 from .config.db import engine, Base
+from .config.model_metadata import ensure_model_metadata_columns
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -16,6 +17,7 @@ app = FastAPI()
 async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await ensure_model_metadata_columns(conn)
 
 
 # Explicit origins only — "*" together with allow_credentials=True is an

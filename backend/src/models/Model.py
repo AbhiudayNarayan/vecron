@@ -11,6 +11,11 @@ class ModelTable(Base):
     task_type = Column(String(50))
     industry = Column(String(80))
     accuracy = Column(Float, nullable=True)
+    runtime = Column(String(32), nullable=True)
+    model_size_mb = Column(Float, nullable=True)
+    latency_ms = Column(Float, nullable=True)
+    optimization = Column(String(32), nullable=True)
+    supported_devices = Column(Text, nullable=True)  # JSON string, e.g. ["edge", "cpu"]
     onnx_url = Column(String(255), nullable=False)
     input_size = Column(Integer, default=640)
     labels = Column(Text)                       # JSON string of class names, e.g. '["smoke", "fire"]'

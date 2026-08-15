@@ -11,10 +11,12 @@ one env var, never the seeded row.
 import argparse
 import asyncio
 import os
+from pathlib import Path
 
 from sqlalchemy import select
 
 from src.config.db import AsyncSessionLocal, engine, Base
+from src.config.model_metadata import ensure_model_metadata_columns
 from src.models.Model import ModelTable  # noqa: F401 — registers table on Base
 
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
@@ -29,8 +31,19 @@ GEOTRAX_NAME = "GeoTrax Traffic Detection"
 # onnx_url is only updated when --force is passed — see upsert()).
 DESCRIPTIVE_FIELDS = (
     "description", "task_type", "industry", "accuracy",
+    "runtime", "model_size_mb", "latency_ms", "optimization", "supported_devices",
     "input_size", "labels", "license", "is_free", "cloud_eligible",
 )
+
+STATIC_MODELS_DIR = Path(__file__).parent / "statics" / "models"
+
+
+def model_size_mb(filename: str) -> float | None:
+    """Return the actual static model size, never a hand-written estimate."""
+    path = STATIC_MODELS_DIR / filename
+    if not path.is_file():
+        return None
+    return round(path.stat().st_size / (1024 * 1024), 2)
 
 SEED_MODELS = [
     {
@@ -42,6 +55,11 @@ SEED_MODELS = [
         "task_type": "detection",
         "industry": "safety",
         "accuracy": None,  # TODO: fill in measured mAP once evaluated
+        "runtime": "ONNX",
+        "model_size_mb": model_size_mb("fire_smoke_v1.onnx"),
+        "latency_ms": None,  # measured hardware/browser benchmark required
+        "optimization": None,  # not confirmed in model metadata
+        "supported_devices": None,  # populate only from verified deployment tests
         "onnx_url": f"{BASE_URL}/static/models/fire_smoke_v1.onnx",
         "input_size": 640,
         "labels": '["smoke", "fire"]',
@@ -59,6 +77,11 @@ SEED_MODELS = [
         "task_type": "detection",
         "industry": "waste management",
         "accuracy": None,  # TODO: fill in measured mAP once evaluated
+        "runtime": "ONNX",
+        "model_size_mb": model_size_mb("Garbage_classification.onnx"),
+        "latency_ms": None,
+        "optimization": None,
+        "supported_devices": None,
         "onnx_url": f"{BASE_URL}/static/models/Garbage_classification.onnx",
         "input_size": 640,
         "labels": '["BIODEGRADABLE","CARDBOARD","GLASS","METAL","PAPER","PLASTIC"]',
@@ -76,6 +99,11 @@ SEED_MODELS = [
         "task_type": "detection",
         "industry": "infrastructure",
         "accuracy": None,
+        "runtime": "ONNX",
+        "model_size_mb": model_size_mb("pot_hole_better.onnx"),
+        "latency_ms": None,
+        "optimization": None,
+        "supported_devices": None,
         "onnx_url": f"{BASE_URL}/static/models/pot_hole_better.onnx",
         "input_size": 640,
         "labels": '["pothole"]',
@@ -93,6 +121,11 @@ SEED_MODELS = [
         "task_type": "detection",
         "industry": "waste management",
         "accuracy": None,
+        "runtime": "ONNX",
+        "model_size_mb": model_size_mb("garbagedetection.onnx"),
+        "latency_ms": None,
+        "optimization": None,
+        "supported_devices": None,
         "onnx_url": f"{BASE_URL}/static/models/garbagedetection.onnx",
         "input_size": 640,
         "labels": '["overflow", "garbage_bin", "garbage"]',
@@ -110,6 +143,11 @@ SEED_MODELS = [
         "task_type": "detection",
         "industry": "transportation",
         "accuracy": 0.711,  # supplied mAP@50-95
+        "runtime": "ONNX",
+        "model_size_mb": model_size_mb("geotrax_hbb_yolov8s_1920_v1.onnx"),
+        "latency_ms": None,
+        "optimization": None,
+        "supported_devices": None,
         "onnx_url": f"{BASE_URL}/static/models/geotrax_hbb_yolov8s_1920_v1.onnx",
         "input_size": 1920,
         "labels": '["Car", "Bus", "Truck", "Motorcycle", "Pedestrian", "Bicycle"]',
@@ -149,6 +187,7 @@ async def seed(force=False):
     # Ensure the table exists (mirrors app.py startup) so this can run standalone.
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await ensure_model_metadata_columns(conn)
 
     async with AsyncSessionLocal() as session:
         for data in SEED_MODELS:

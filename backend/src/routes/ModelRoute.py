@@ -27,7 +27,20 @@ async def _has_fulltext_index(db: AsyncSession) -> bool:
 
 # PUBLIC — no auth dependency. Free tier works without login.
 @route.get("", response_model=list[ModelOut])
-async def list_models(q: str | None = None, db: AsyncSession = Depends(get_db)):
+async def list_models(
+    q: str | None = None,
+    task: str | None = None,
+    domain: str | None = None,
+    runtime: str | None = None,
+    device: str | None = None,
+    optimization: str | None = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """List catalog models with optional metadata filters.
+
+    All filters are backed by stored model metadata. Fields with no verified
+    value stay NULL and therefore are never presented as made-up capabilities.
+    """
     stmt = select(ModelTable)
 
     if q:
@@ -49,7 +62,20 @@ async def list_models(q: str | None = None, db: AsyncSession = Depends(get_db)):
                 )
             )
 
-    result = await db.execute(stmt)
+    if task:
+        stmt = stmt.where(ModelTable.task_type == task)
+    if domain:
+        stmt = stmt.where(ModelTable.industry == domain)
+    if runtime:
+        stmt = stmt.where(ModelTable.runtime == runtime)
+    if optimization:
+        stmt = stmt.where(ModelTable.optimization == optimization)
+    if device:
+        # Device targets are stored as a JSON string. This matches an exact
+        # quoted element without requiring MySQL JSON column migration.
+        stmt = stmt.where(ModelTable.supported_devices.ilike(f'%"{device}"%'))
+
+    result = await db.execute(stmt.order_by(ModelTable.name.asc()))
     return result.scalars().all()
 
 
