@@ -1,0 +1,13 @@
+# Edgenix
+
+> Lightweight AI for real-world tasks.
+
+## Product
+- [AI Catalog](https://www.edgenix.dev/catalog): Explore lightweight AI capabilities and the models that power them.
+- [Public Feed](https://www.edgenix.dev/feed): Civic issues reported by the community — newest first.
+
+## About
+- Find the right AI capability. Run it where you need it. Built by [@abhiuday](https://www.linkedin.com/in/abhiuday-narayan-a44153327/).
+
+## Contact
+- [LinkedIn](https://www.linkedin.com/in/abhiuday-narayan-a44153327/)

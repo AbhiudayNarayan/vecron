@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.edgenix.dev/</loc>
+  </url>
+  <url>
+    <loc>https://www.edgenix.dev/catalog</loc>
+  </url>
+  <url>
+    <loc>https://www.edgenix.dev/discover</loc>
+  </url>
+  <url>
+    <loc>https://www.edgenix.dev/feed</loc>
+  </url>
+  <url>
+    <loc>https://www.edgenix.dev/login</loc>
+  </url>
+  <url>
+    <loc>https://www.edgenix.dev/register</loc>
+  </url>
+</urlset>
