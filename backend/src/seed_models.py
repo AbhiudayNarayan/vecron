@@ -10,6 +10,7 @@ one env var, never the seeded row.
 """
 import argparse
 import asyncio
+import json
 import os
 from pathlib import Path
 
@@ -26,6 +27,21 @@ GARBAGE_NAME = "Garbage Classification"
 POT_HOLE_NAME = "Pothole Detection"
 GARBAGE_DETECTION_NAME = "Garbage Detection"
 GEOTRAX_NAME = "GeoTrax Traffic Detection"
+YOLO26N_COCO_NAME = "YOLO26n COCO Detection"
+
+COCO_LABELS = (
+    "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck",
+    "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench",
+    "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra",
+    "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis",
+    "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard",
+    "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife",
+    "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot",
+    "hot dog", "pizza", "donut", "cake", "chair", "couch", "potted plant", "bed",
+    "dining table", "toilet", "tv", "laptop", "mouse", "remote", "keyboard", "cell phone",
+    "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
+    "scissors", "teddy bear", "hair drier", "toothbrush",
+)
 
 # Descriptive columns kept in sync on every run (id and name are never touched;
 # onnx_url is only updated when --force is passed — see upsert()).
@@ -154,6 +170,29 @@ SEED_MODELS = [
         "license": "unknown",  # source package did not include license information
         "is_free": True,
         # Keep browser-only until the model's license is confirmed.
+        "cloud_eligible": False,
+    },
+    {
+        "name": YOLO26N_COCO_NAME,
+        "description": (
+            "Detects 80 everyday COCO object categories, including people, vehicles, "
+            "animals, household items, and sports equipment, in images and video."
+        ),
+        "task_type": "detection",
+        "industry": "general purpose",
+        "accuracy": None,  # No benchmark metric was supplied with this ONNX artifact.
+        "runtime": "ONNX",
+        "model_size_mb": model_size_mb("yolo26n.onnx"),
+        "latency_ms": None,  # measured hardware/browser benchmark required
+        "optimization": "end-to-end detection output",
+        "supported_devices": None,  # populate only from verified deployment tests
+        "onnx_url": f"{BASE_URL}/static/models/yolo26n.onnx",
+        "input_size": 640,
+        "labels": json.dumps(COCO_LABELS),
+        "license": "AGPL-3.0",
+        "is_free": True,
+        # ONNX metadata identifies this as an Ultralytics AGPL-3.0 model.
+        # It is therefore available only for free, in-browser inference.
         "cloud_eligible": False,
     },
 ]

@@ -21,7 +21,7 @@ specific kind of model. A model works **only if all of these hold**:
 |---|---|
 | **Format** | ONNX, with an opset compatible with `onnxruntime-web` (we use **opset 12**). |
 | **Architecture** | YOLO-style **detection** head. |
-| **Output shape** | `(1, 4 + numClasses, 8400)` — the *transposed* YOLO head. See below. |
+| **Output shape** | Either `(1, 4 + numClasses, 8400)` (raw transposed head) or `(1, numDetections, 6)` (end-to-end detections). See below. |
 | **Input** | A single **square** RGB tensor `(1, 3, S, S)`, pixels normalised to `0..1`, channel-planar (NCHW). `S` is the input size (e.g. `320`, `640`). |
 | **Labels** | An array of class names whose **order matches the model's class indices**: index `0` = first label, index `1` = second, … |
 
@@ -42,6 +42,14 @@ The square input size is whatever you record in the DB (`input_size`).
 detections back using the original width/height, so no letterbox bookkeeping is
 needed.
 
+### End-to-end output: `(1, numDetections, 6)`
+
+The runner also supports end-to-end models such as the bundled YOLO26n COCO
+export. Each row is `[x1, y1, x2, y2, confidence, classId]` in input-pixel
+coordinates. These rows are already filtered by the model, so the engine scales
+and validates them but does **not** run NMS a second time. The `classId` must
+index into the catalog row's ordered `labels` array.
+
 ### What is NOT supported
 
 The current engine is a detection-only engine. These need **engine changes** and
@@ -51,8 +59,9 @@ will **not** work by just adding a catalog row:
 - **Classification** models (no boxes).
 - **Pose / keypoint** models.
 - Any **different output layout** — e.g. the older non-transposed
-  `(1, 8400, 4 + numClasses)`, or models that emit `[x1,y1,x2,y2,score,class]`
-  rows, or that bake objectness into a separate channel.
+  `(1, 8400, 4 + numClasses)`, rows other than the supported end-to-end
+  `[x1,y1,x2,y2,score,class]` layout, or that bake objectness into a separate
+  channel.
 
 If your model is one of these, stop — adding a catalog row will produce garbage
 boxes. Extend `yoloEngine.js` first (that is out of scope for this guide).
@@ -88,11 +97,13 @@ import onnxruntime as ort
 
 sess = ort.InferenceSession("your_model.onnx")
 out = sess.get_outputs()[0]
-print(out.name, out.shape)   # expect [1, 4 + numClasses, 8400], e.g. [1, 6, 8400]
+print(out.name, out.shape)
+# expect either [1, 4 + numClasses, 8400], e.g. [1, 6, 8400],
+# or an end-to-end [1, numDetections, 6], e.g. [1, 300, 6]
 ```
 
-If the second dimension is not `4 + numClasses`, or the boxes are on the wrong
-axis, the model does **not** fit the contract (see "What is NOT supported").
+If the output matches neither supported shape, the model does **not** fit the
+contract (see "What is NOT supported").
 
 ### 2c. Place the `.onnx`
 

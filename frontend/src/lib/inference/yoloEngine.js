@@ -65,8 +65,8 @@ export async function runInference(session, tensor, inputSize) {
 }
 
 /**
- * Decode a transposed YOLO detection head into clean boxes in ORIGINAL image
- * coordinates, with non-max suppression applied.
+ * Decode a supported YOLO detection output into clean boxes in ORIGINAL image
+ * coordinates. Raw heads receive non-max suppression; end-to-end heads do not.
  *
  * Expected output layout: (1, 4 + numClasses, numBoxes) — e.g. (1, 6, 8400) for
  * a 2-class model. That's the transposed form: for each of the numBoxes
@@ -92,6 +92,16 @@ export function postprocess(output, {
     originalWidth,
     originalHeight,
 }) {
+    if (isEndToEndOutput(output)) {
+        return postprocessEndToEnd(output, {
+            numClasses,
+            inputSize,
+            confThreshold,
+            originalWidth,
+            originalHeight,
+        });
+    }
+
     const data = output.data;
     // dims: [1, channels, numBoxes] where channels === 4 + numClasses.
     const channels = output.dims[1];
@@ -138,6 +148,53 @@ export function postprocess(output, {
     }
 
     return nms(candidates, iouThreshold);
+}
+
+/** True for end-to-end YOLO outputs: [batch, detectionCount, x1y1x2y2scoreclass]. */
+function isEndToEndOutput(output) {
+    return output.dims?.length === 3 && output.dims[0] === 1 && output.dims[2] === 6;
+}
+
+/**
+ * Decode an already-filtered [x1, y1, x2, y2, confidence, classId] output.
+ * Coordinates are in the fixed square input space. End-to-end models have
+ * already filtered their detections, so this path intentionally skips NMS.
+ */
+function postprocessEndToEnd(output, {
+    numClasses,
+    inputSize,
+    confThreshold,
+    originalWidth,
+    originalHeight,
+}) {
+    const { data } = output;
+    const numDetections = output.dims[1];
+    const scaleX = originalWidth / inputSize;
+    const scaleY = originalHeight / inputSize;
+    const detections = [];
+
+    for (let i = 0; i < numDetections; i++) {
+        const offset = i * 6;
+        const score = data[offset + 4];
+        const classId = Math.round(data[offset + 5]);
+
+        // Unused rows are commonly encoded with score 0 and/or class -1.
+        if (score < confThreshold || classId < 0 || classId >= numClasses) continue;
+
+        const x1 = clamp(data[offset] * scaleX, 0, originalWidth);
+        const y1 = clamp(data[offset + 1] * scaleY, 0, originalHeight);
+        const x2 = clamp(data[offset + 2] * scaleX, 0, originalWidth);
+        const y2 = clamp(data[offset + 3] * scaleY, 0, originalHeight);
+
+        if (x2 <= x1 || y2 <= y1) continue;
+        detections.push({ x1, y1, x2, y2, score, classId });
+    }
+
+    return detections;
+}
+
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
 }
 
 /**
