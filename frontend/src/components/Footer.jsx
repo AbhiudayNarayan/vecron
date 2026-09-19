@@ -38,6 +38,7 @@ const Footer = () => {
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium text-muted">
           <Link to="/catalog" className="transition-colors hover:text-accent">AI Catalog</Link>
           <Link to="/workflows" className="transition-colors hover:text-accent">Workflows</Link>
+          <Link to="/resume" className="transition-colors hover:text-accent">Resume</Link>
           <Link to="/register" className="transition-colors hover:text-accent">Get started</Link>
         </nav>
 

@@ -7,10 +7,13 @@ export function MainProvider({ children }) {
     const [user, setUser]           = useState(null);
     const [token, setToken]         = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [loading, setLoading]     = useState(true);
+    const [loading, setLoading]     = useState(() => !window.location.pathname.startsWith('/resume'));
 
     // Boot-time check: validate any stored token against /me
     useEffect(() => {
+        if (window.location.pathname.startsWith('/resume')) {
+            return;
+        }
         const stored = localStorage.getItem("token") || sessionStorage.getItem("token");
         if (!stored) {
             setLoading(false);

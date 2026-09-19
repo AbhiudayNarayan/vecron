@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { axiosClient } from "./utils/axiosClient";
 
 import LoginPage from './pages/LoginPage'
@@ -15,8 +15,10 @@ import NotFoundPage from './pages/NotFoundPage'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ProtectedRoute from './components/ProtectedRoute'
+import ResumePage from './pages/ResumePage'
 
 const App = () => {
+  const location = useLocation()
   const checkServerHealth = async () => {
     try {
       const response = await axiosClient.get("/health/")
@@ -28,8 +30,9 @@ const App = () => {
   }
 
   useEffect(() => {
+    if (location.pathname.startsWith('/resume')) return
     checkServerHealth()
-  }, [])
+  }, [location.pathname])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -46,6 +49,8 @@ const App = () => {
         <Route path='/model/:id/run' Component={ModelRunnerPage} />
         <Route path='/login' Component={LoginPage} />
         <Route path='/register' Component={RegisterPage} />
+        <Route path='/resume' Component={ResumePage} />
+        <Route path='/resume/index.html' Component={ResumePage} />
         <Route path='/dashboard' element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
